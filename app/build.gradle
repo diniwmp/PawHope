@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id 'com.google.gms.google-services'
+
 }
 
 android {
@@ -28,14 +30,37 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.activity
-    implementation libs.constraintlayout
+    // AndroidX & Core UI
+    implementation libs.appcompat.v161
+    implementation libs.material.v1110
+    implementation libs.constraintlayout.v214
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    implementation libs.androidx.swiperefreshlayout
+
+    // Google Play Services: Maps & Location
+    implementation libs.play.services.maps
+    implementation libs.play.services.location
+
+    // Glide
+    implementation libs.glide
+    annotationProcessor libs.compiler
+
+    // CircleImageView
+    implementation libs.circleimageview
+
+    // Gson
+    implementation libs.gson
+
+    // Testing
     testImplementation libs.junit
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.androidx.junit.v115
+    androidTestImplementation libs.androidx.espresso.core.v351
+
 }
