@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- GoMart Primary Palette -->
+    <color name="primary_color">#00674F</color>
+    <color name="primary_dark">#004F3D</color>
+    <color name="primary_light">#E6F0EE</color>
+
+    <!-- Accents & Badges -->
+    <color name="accent_orange">#FF8B00</color>
+    <color name="emergency_red">#D32F2F</color>
+    <color name="status_green">#2E7D32</color>
+
+    <!-- Backgrounds & Surfaces -->
+    <color name="background_light">#F6F6F6</color>
+    <color name="surface_white">#FFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#9E9E9E</color>
+
+    <!-- Borders & Dividers -->
+    <color name="divider_color">#E0E0E0</color>
+    <color name="border_gray">#D6D6D6</color>
 </resources>
