@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">PawHope</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="splash_loading_start">Loading 0%</string>
+    <string name="splash_loading">Loading %1$d%%</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_add">Report</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_notifications">Notifications</string>
 </resources>

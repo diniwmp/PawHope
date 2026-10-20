@@ -1,26 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base Application Theme -->
     <style name="Theme.PawHope" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary Brand Colors -->
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@android:color/white</item>
 
-        <!-- Secondary Brand Colors -->
-        <item name="colorSecondary">@color/accent_orange</item>
-        <item name="colorSecondaryVariant">@color/accent_orange</item>
-        <item name="colorOnSecondary">@android:color/white</item>
+        <!-- Primary -->
+        <item name="colorPrimary">#6ED4CB</item>
+        <item name="colorPrimaryVariant">#77787B</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
 
-        <!-- Backgrounds -->
-        <item name="android:windowBackground">@color/background_light</item>
-        <item name="colorSurface">@color/surface_white</item>
-        <item name="colorOnSurface">@color/text_primary</item>
+        <!-- Secondary -->
+        <item name="colorSecondary">#F5F5F5</item>
+        <item name="colorSecondaryVariant">#3FB3A9</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
 
-        <!-- Status Bar -->
-        <item name="android:statusBarColor">@color/primary_color</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <!-- Background — White -->
+        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#000000</item>
+        <item name="colorOnBackground">#000000</item>
 
-        <!-- Default Font Family (GoMart එකේ තිබූ Poppins) -->
-        <item name="fontFamily">@font/poppins</item>
+        <!-- Status bar -->
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+
+        <!-- Cards + UI -->
+        <item name="cardBackgroundColor">#FFFFFF</item>
+        <item name="android:windowFullscreen">false</item>
+
     </style>
 </resources>
