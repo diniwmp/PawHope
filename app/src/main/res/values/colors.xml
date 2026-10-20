@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- GoMart Primary Palette -->
-    <color name="primary_color">#00674F</color>
-    <color name="primary_dark">#004F3D</color>
-    <color name="primary_light">#E6F0EE</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FFFFFF</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#000000</color>
+    <color name="cyan_blue">#6ED4CB</color>
+    <color name="grey">#BCBCBC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="close_grey">#7a7a7a</color>
+    <color name="min_btn_grey">#9E9E9E</color>
+    <color name="max_btn_cyan_blue">#6ED4CB</color>
+    <color name="red">#E53935</color>
+    <color name="p_address_grey">#AAAAAA</color>
+    <color name="text_grey">#888888</color>
+    <color name="address_check_grey">#555555</color>
+    <color name="toggle_cyan_blue">#C9F1EC</color>
+    <color name="grey_light">#EEEEEE</color>
+    <color name="forward_grey">#CCCCCC</color>
+    <color name="green_light">#25D366</color>
+    <color name="white_smoke">#F5F5F5</color>
+    <color name="dark_grey">#4C4843</color>
+    <color name="dark_green">#4CAF50</color>
+    <color name="rating_grey">#DDDDDD</color>
+    <color name="time_grey">#999999</color>
+    <color name="online_green">#22C55E</color>
+    <color name="hint_grey">#94A3B8</color>
+    <color name="b_red">#F44336</color>
+    <color name="blue">#009688</color>
+    <color name="dark_blue">#2196F3</color>
+    <color name="itemRippleColor">#336ED4CB</color>
+    <color name="cream">#FFF3E0</color>
+    <color name="pro_blue">#DBEAFE</color>
+    <color name="msg_grey">#F6F6F6</color>
+    <color name="dark_red">#EF4444</color>
+    <color name="limit_stock_color">#F59E0B</color>
 
-    <!-- Accents & Badges -->
-    <color name="accent_orange">#FF8B00</color>
-    <color name="emergency_red">#D32F2F</color>
-    <color name="status_green">#2E7D32</color>
-
-    <!-- Backgrounds & Surfaces -->
+    <!-- PawHope semantic colors (light mode) -->
+    <color name="primary_color">#6ED4CB</color>
+    <color name="primary_dark">#3FB3A9</color>
+    <color name="primary_light">#E4F7F5</color>
     <color name="background_light">#F6F6F6</color>
     <color name="surface_white">#FFFFFF</color>
-    <color name="card_background">#FFFFFF</color>
-
-    <!-- Text Colors -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
-    <color name="text_hint">#9E9E9E</color>
-
-    <!-- Borders & Dividers -->
     <color name="divider_color">#E0E0E0</color>
-    <color name="border_gray">#D6D6D6</color>
 </resources>
