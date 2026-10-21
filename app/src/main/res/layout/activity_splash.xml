@@ -1,40 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:fitsSystemWindows="true"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".activity.SplashActivity">
 
-    <ImageView
-        android:id="@+id/splashLogo"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_marginBottom="40dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/app_logo" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/splashProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="260dp"
-        android:layout_height="8dp"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/progress_bar" />
+        <!-- Logo + ripple rings -->
+        <FrameLayout
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-    <TextView
-        android:id="@+id/loadingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="@string/splash_loading_start"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+            <View
+                android:id="@+id/ripple1"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:alpha="0"
+                android:background="@drawable/ripple_ring" />
 
-</LinearLayout>
+            <View
+                android:id="@+id/ripple2"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:alpha="0"
+                android:background="@drawable/ripple_ring" />
+
+            <ImageView
+                android:id="@+id/splashLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_logo_circle"
+                android:contentDescription="@string/app_name"
+                android:padding="26dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/new_logo" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/splashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/app_name"
+            android:textColor="@color/text_primary"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/splashTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="0.05"
+            android:text="@string/splash_tagline"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <!-- Walking paws loader -->
+        <LinearLayout
+            android:id="@+id/pawRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:alpha="0"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/paw1"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="14dp"
+                android:alpha="0.25"
+                android:rotation="-18"
+                android:src="@drawable/ic_paw"
+                app:tint="@color/primary_color"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/paw2"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="14dp"
+                android:alpha="0.25"
+                android:rotation="18"
+                android:src="@drawable/ic_paw"
+                app:tint="@color/primary_color"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/paw3"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:alpha="0.25"
+                android:rotation="-18"
+                android:src="@drawable/ic_paw"
+                app:tint="@color/primary_color"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
