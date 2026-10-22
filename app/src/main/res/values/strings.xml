@@ -10,4 +10,30 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_notifications">Notifications</string>
     <string name="splash_tagline">Every paw deserves a home</string>
+    <string name="chip_all">All</string>
+    <string name="chip_dogs">Dogs</string>
+    <string name="chip_cats">Cats</string>
+    <string name="chip_urgent">Urgent</string>
+    <string name="chip_home">Needs a home</string>
+    <string name="home_count">%1$d animals waiting for help</string>
+    <string name="empty_title">No animals reported yet</string>
+    <string name="empty_sub">Be the first to report a stray animal in need</string>
+
+    <string name="type_dog">Dog</string>
+    <string name="type_cat">Cat</string>
+    <string name="type_other">Animal</string>
+
+    <string name="need_help">Needs help</string>
+    <string name="need_home">Needs a home</string>
+    <string name="need_both">Help &amp; a home</string>
+
+    <string name="cond_healthy">Healthy</string>
+    <string name="cond_needs_help">Needs help</string>
+    <string name="cond_injured">Injured</string>
+    <string name="cond_critical">Critical</string>
+
+    <string name="just_now">Just now</string>
+    <string name="location_pinned">Location pinned</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-coreKtx = "1.10.0"
+coreKtx = "1.18.0"
 dotsindicator = "4.3"
 places = "4.3.1"
 androidxJunit = "1.1.5"
@@ -32,13 +32,14 @@ playServicesMaps = "18.2.0"
 swiperefreshlayout = "1.1.0"
 preference = "1.2.1"
 recyclerview = "1.4.0"
-kotlin = "2.0.21"
+kotlin = "2.4.10"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 composeBom = "2024.09.00"
+kotlinVersion = "2.2.0"
+coreKtxVersion = "1.19.1"
 
 [libraries]
-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
@@ -47,8 +48,9 @@ androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefre
 appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
-
+core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.18.0" }
 constraintlayout-v214 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -86,11 +88,13 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 
