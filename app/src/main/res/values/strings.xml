@@ -34,6 +34,30 @@
 
     <string name="just_now">Just now</string>
     <string name="location_pinned">Location pinned</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cond_sick">Sick</string>
+
+    <string name="report_title">Report an animal</string>
+    <string name="report_subtitle">Help us reach a stray animal in need</string>
+    <string name="label_photos">Photos</string>
+    <string name="add_photo">Add</string>
+    <string name="label_animal">Animal</string>
+    <string name="label_urgency">How is the animal?</string>
+    <string name="label_need">What does it need?</string>
+    <string name="label_description">Description</string>
+    <string name="hint_description">Describe the animal and where you saw it</string>
+    <string name="label_location">Location</string>
+    <string name="no_location">No location selected</string>
+    <string name="pin_location">Pin location on map</string>
+    <string name="change_location">Change location</string>
+    <string name="label_contact">Contact (optional)</string>
+    <string name="hint_name">Your name</string>
+    <string name="hint_phone">Phone number</string>
+    <string name="contact_note">Only the PawHope team can see this.</string>
+    <string name="btn_report">Report animal</string>
+
+    <string name="search_hint">Search a place or address</string>
+    <string name="move_map_hint">Move the map to place the pin on the animal</string>
+    <string name="finding_address">Finding address…</string>
+    <string name="confirm_location">Confirm location</string>
 </resources>
