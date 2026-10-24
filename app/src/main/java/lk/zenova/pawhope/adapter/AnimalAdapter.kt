@@ -72,6 +72,7 @@ class AnimalAdapter(
         val (condColor, condLabel) = when (animal.condition) {
             "critical" -> R.color.red to R.string.cond_critical
             "injured" -> R.color.limit_stock_color to R.string.cond_injured
+            "sick" -> R.color.dark_blue to R.string.cond_sick
             "healthy" -> R.color.online_green to R.string.cond_healthy
             else -> R.color.dark_blue to R.string.cond_needs_help
         }

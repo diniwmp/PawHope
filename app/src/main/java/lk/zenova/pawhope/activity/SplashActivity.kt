@@ -153,7 +153,7 @@ class SplashActivity : AppCompatActivity() {
             .alpha(0f)
             .setDuration(700)
             .withEndAction {
-                startActivity(Intent(this, MainActivity::class.java))   // MainActivity::class.java = Java වල MainActivity.class
+                startActivity(Intent(this, MainActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
             }
