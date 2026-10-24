@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import lk.zenova.pawhope.R
-import lk.zenova.pawhope.fragment.HomeFragment;
+import lk.zenova.pawhope.fragment.HomeFragment
 import lk.zenova.pawhope.fragment.PlaceholderFragment
+import lk.zenova.pawhope.fragment.ReportFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,12 +20,11 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            // when = switch. item.itemId = item.getItemId()
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
-                R.id.nav_map -> loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_map)))
-                R.id.nav_add -> loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_add)))
-                R.id.nav_profile -> loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_profile)))
+                R.id.nav_add -> loadFragment(ReportFragment())
+                R.id.nav_profile ->
+                    loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_profile)))
             }
             true
         }
@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             bottomNavigationView.selectedItemId = R.id.nav_home
         }
+    }
+
+    fun goHome() {
+        bottomNavigationView.selectedItemId = R.id.nav_home
     }
 
     private fun loadFragment(fragment: Fragment) {

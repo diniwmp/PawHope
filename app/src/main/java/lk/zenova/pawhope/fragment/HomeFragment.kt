@@ -127,7 +127,11 @@ class HomeFragment : Fragment() {
         val checked = chipGroup.checkedChipId
 
         // filter { } = Java වල for loop + if + add කරන කොටස එක පේළියකින්
-        val filtered = allAnimals.filter { matches(it, checked) }
+        val filtered = allAnimals.
+        filter { matches(it, checked) }
+            .sortedWith(
+                compareBy<Animal> { urgencyRank(it.condition) }
+                    .thenByDescending { it.createdAt })
 
         adapter.setItems(filtered)
 
@@ -135,6 +139,14 @@ class HomeFragment : Fragment() {
         emptyState.visibility = if (empty) View.VISIBLE else View.GONE
         countText.visibility = if (empty) View.GONE else View.VISIBLE
         countText.text = getString(R.string.home_count, filtered.size)
+    }
+
+    // අඩු අගය = වැඩි හදිසිය
+    private fun urgencyRank(condition: String): Int = when (condition) {
+        "critical" -> 0
+        "injured" -> 1
+        "sick", "needs_help" -> 2
+        else -> 3   // healthy
     }
 
     private fun matches(animal: Animal, checkedChipId: Int): Boolean = when (checkedChipId) {

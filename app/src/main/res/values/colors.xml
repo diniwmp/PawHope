@@ -15,6 +15,7 @@
     <color name="red">#E53935</color>
     <color name="p_address_grey">#AAAAAA</color>
     <color name="text_grey">#888888</color>
+    <color name="text_hint">#757575</color>
     <color name="address_check_grey">#555555</color>
     <color name="toggle_cyan_blue">#C9F1EC</color>
     <color name="grey_light">#EEEEEE</color>
