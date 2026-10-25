@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
                 R.id.nav_add -> loadFragment(ReportFragment())
+                R.id.nav_notifications ->
+                    loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_notifications)))
                 R.id.nav_profile ->
                     loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_profile)))
             }
