@@ -9,4 +9,20 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="TextAppearance.PawHope.Chip" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+    <style name="Widget.PawHope.Chip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_bg_color</item>
+        <item name="chipStrokeColor">@color/primary_color</item>
+        <item name="chipStrokeWidth">1.5dp</item>
+        <item name="rippleColor">@color/primary_light</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="android:textAppearance">@style/TextAppearance.PawHope.Chip</item>
+    </style>
 </resources>
