@@ -57,7 +57,7 @@ dependencies {
     implementation libs.androidx.swiperefreshlayout
     implementation libs.androidx.preference
     implementation libs.androidx.activity
-
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
     // Navigation KTX
     implementation libs.navigation.fragment.ktx
     implementation libs.navigation.ui.ktx

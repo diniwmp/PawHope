@@ -60,4 +60,37 @@
     <string name="move_map_hint">Move the map to place the pin on the animal</string>
     <string name="finding_address">Finding address…</string>
     <string name="confirm_location">Confirm location</string>
+    <string name="detail_about">About</string>
+    <string name="detail_location">Location</string>
+    <string name="get_directions">Get directions</string>
+    <string name="btn_help">I want to help</string>
+    <string name="own_report_note">This is your report</string>
+    <string name="adopted_note">This animal has found a home 🎉</string>
+    <string name="info_type">Animal</string>
+    <string name="info_condition">Condition</string>
+    <string name="info_status">Status</string>
+
+    <string name="auth_signup_title">Create your account</string>
+    <string name="auth_signup_sub">Join PawHope and help animals find a home</string>
+    <string name="auth_signin_title">Welcome back</string>
+    <string name="auth_signin_sub">Sign in to continue helping animals</string>
+    <string name="hint_full_name">Full name</string>
+    <string name="hint_mobile">Mobile number</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="btn_signup">Sign up</string>
+    <string name="btn_signin">Sign in</string>
+    <string name="switch_to_signin">Already have an account? Sign in</string>
+    <string name="switch_to_signup">New to PawHope? Create an account</string>
+
+    <string name="help_sheet_title">How would you like to help?</string>
+    <string name="help_sheet_sub">The PawHope team will review your offer and contact you.</string>
+    <string name="help_adopt">Adopt</string>
+    <string name="help_foster">Foster</string>
+    <string name="help_food">Food &amp; water</string>
+    <string name="help_medical">Vet / medical</string>
+    <string name="help_visit">Visit &amp; check</string>
+    <string name="hint_help_message">Add a message (optional)</string>
+    <string name="btn_send_offer">Send offer</string>
 </resources>
