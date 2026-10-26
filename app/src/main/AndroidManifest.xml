@@ -22,6 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawHope">
         <activity
+            android:name=".activity.AnimalDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activity.LocationPickerActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

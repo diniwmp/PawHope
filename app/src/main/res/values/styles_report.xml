@@ -25,4 +25,16 @@
         <item name="android:textColor">@color/chip_text_color</item>
         <item name="android:textAppearance">@style/TextAppearance.PawHope.Chip</item>
     </style>
+
+    <style name="Widget.PawHope.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/input_stroke_color</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+        <item name="boxStrokeWidthFocused">2.5dp</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="hintTextColor">@color/primary_dark</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+    </style>
 </resources>

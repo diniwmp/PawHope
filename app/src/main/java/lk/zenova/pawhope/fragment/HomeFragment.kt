@@ -18,6 +18,8 @@ import com.google.firebase.firestore.Query
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.adapter.AnimalAdapter
 import lk.zenova.pawhope.model.Animal
+import android.content.Intent
+import lk.zenova.pawhope.activity.AnimalDetailActivity
 
 class HomeFragment : Fragment() {
 
@@ -52,9 +54,10 @@ class HomeFragment : Fragment() {
 
         recycler.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        // අන්තිම parameter එක lambda නම් () වලින් එළියට { } ලියන්න පුළුවන් (trailing lambda)
-        adapter = AnimalAdapter(requireContext()) {
-            Toast.makeText(requireContext(), "Details coming soon", Toast.LENGTH_SHORT).show()
+        adapter = AnimalAdapter(requireContext()) { animal ->
+            val intent = Intent(requireContext(), AnimalDetailActivity::class.java)
+            intent.putExtra(AnimalDetailActivity.EXTRA_ANIMAL_ID, animal.id)
+            startActivity(intent)
         }
         recycler.adapter = adapter
 
@@ -65,7 +68,6 @@ class HomeFragment : Fragment() {
             startListening()
         }
 
-        // "_" = මේ parameters අවශ්‍ය නෑ කියලා නොසලකා හරිනවා
         chipGroup.setOnCheckedStateChangeListener { _, _ -> applyFilter() }
     }
 
