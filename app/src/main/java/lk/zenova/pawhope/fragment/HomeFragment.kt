@@ -23,10 +23,8 @@ import lk.zenova.pawhope.activity.AnimalDetailActivity
 
 class HomeFragment : Fragment() {
 
-    // Firestore එකෙන් එන සියලුම සත්තු
     private val allAnimals = mutableListOf<Animal>()
 
-    // ListenerRegistration? = null වෙන්න පුළුවන් ("?"). listener එක නැවැත්වීමට ඕනි
     private var registration: ListenerRegistration? = null
 
     private lateinit var adapter: AnimalAdapter
@@ -81,7 +79,6 @@ class HomeFragment : Fragment() {
         stopListening()
     }
 
-    // Firestore එකෙන් real-time data අහන්න පටන් ගන්නවා
     private fun startListening() {
         if (allAnimals.isEmpty()) {
             progressBar.visibility = View.VISIBLE
@@ -120,7 +117,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun stopListening() {
-        registration?.remove()   // ?. = null නැත්නම් විතරක් remove() කරනවා
+        registration?.remove()
         registration = null
     }
 

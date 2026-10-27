@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Form එකේ section මාතෘකා වල පොදු style එක -->
     <style name="SectionLabel">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -10,12 +12,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- Chip එකේ අකුරු -->
     <style name="TextAppearance.PawHope.Chip" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/chip_text_color</item>
     </style>
 
+    <!-- PawHope chip: සුදු පසුබිම + teal outline, තෝරපු විට teal පිරවුම + සුදු අකුරු -->
     <style name="Widget.PawHope.Chip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/chip_bg_color</item>
         <item name="chipStrokeColor">@color/primary_color</item>
@@ -26,6 +30,7 @@
         <item name="android:textAppearance">@style/TextAppearance.PawHope.Chip</item>
     </style>
 
+    <!-- Text fields: teal outline + teal hint -->
     <style name="Widget.PawHope.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/input_stroke_color</item>
         <item name="boxStrokeWidth">1.5dp</item>
@@ -35,6 +40,32 @@
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
         <item name="hintTextColor">@color/primary_dark</item>
-        <item name="android:textColorHint">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/primary_dark</item>
+        <item name="startIconTint">@color/primary_dark</item>
+        <item name="counterTextColor">@color/primary_dark</item>
     </style>
+
+    <!-- Report form එකේ සුදු කාඩ් එක -->
+    <style name="ReportCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="cardBackgroundColor">@color/surface_white</item>
+        <item name="cardCornerRadius">18dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/divider_color</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- කාඩ් එක ඇතුළේ තියෙන කුඩා මාතෘකා -->
+    <style name="CardLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
