@@ -33,6 +33,15 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".activity.MyCareActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.CareDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
