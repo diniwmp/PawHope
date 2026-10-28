@@ -93,4 +93,33 @@
     <string name="help_visit">Visit &amp; check</string>
     <string name="hint_help_message">Add a message (optional)</string>
     <string name="btn_send_offer">Send offer</string>
+    <string name="profile_my_care">My care</string>
+    <string name="profile_my_care_sub">Animals you\'re helping</string>
+    <string name="profile_sign_out">Sign out</string>
+    <string name="profile_guest_title">Join PawHope</string>
+    <string name="profile_guest_sub">Sign in to track the animals you help, get vaccine reminders and care support.</string>
+    <string name="profile_guest_btn">Sign in or create account</string>
+
+    <string name="my_care_title">My care</string>
+    <string name="my_care_empty">You\'re not helping any animal yet</string>
+    <string name="my_care_empty_sub">When you offer to help an animal, you can follow everything here.</string>
+
+    <string name="care_title">Care dashboard</string>
+    <string name="care_vaccines">Vaccines</string>
+    <string name="care_vaccines_empty">The PawHope team will add your animal\'s vaccine schedule here.</string>
+    <string name="care_updates">Care updates</string>
+    <string name="care_updates_empty">No updates yet. Share how your animal is doing.</string>
+    <string name="care_post_update">Post an update</string>
+    <string name="care_report_health">Report a health problem</string>
+
+    <string name="notif_title">Notifications</string>
+    <string name="notif_empty">No notifications yet</string>
+    <string name="notif_empty_sub">Vaccine reminders and messages from the PawHope team will appear here.</string>
+    <string name="notif_guest">Sign in to receive care reminders and messages from the PawHope team.</string>
+
+    <string name="label_symptoms">What did you notice?</string>
+    <string name="label_severity">How serious is it?</string>
+    <string name="hint_update_text">Add details</string>
+    <string name="btn_add_photo">Add photo</string>
+    <string name="btn_submit_update">Send</string>
 </resources>
