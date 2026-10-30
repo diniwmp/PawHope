@@ -33,7 +33,6 @@ import lk.zenova.pawhope.adapter.PhotoPagerAdapter
 import lk.zenova.pawhope.model.Animal
 import kotlin.math.roundToInt
 
-// සතෙක්ගේ සම්පූර්ණ විස්තර බලන screen එක (GoMart වල single product view එක වගේ)
 class AnimalDetailActivity : AppCompatActivity() {
 
     companion object {
@@ -59,7 +58,6 @@ class AnimalDetailActivity : AppCompatActivity() {
     private lateinit var noteText: TextView
     private lateinit var photoAdapter: PhotoPagerAdapter
 
-    // Sign up / Sign in screen එකෙන් ආපහු ආවම: සාර්ථක නම් කෙලින්ම help sheet එක පෙන්නනවා
     private val authLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -104,7 +102,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         loadAnimal(animalId)
     }
 
-    // Firestore එකෙන් ඒ සතාගේ document එක ගන්නවා
     private fun loadAnimal(animalId: String) {
         FirebaseFirestore.getInstance().collection("animals").document(animalId).get()
             .addOnSuccessListener { doc ->
@@ -126,14 +123,12 @@ class AnimalDetailActivity : AppCompatActivity() {
             }
     }
 
-    // ===================== UI පුරවනවා =====================
 
     private fun bindAnimal(a: Animal) {
         // Photos + dots
         photoAdapter.setItems(a.photoUrls)
         setupDots(a.photoUrls.size)
 
-        // සතාගේ වර්ගය
         val typeRes = when (a.animalType) {
             "dog" -> R.string.type_dog
             "cat" -> R.string.type_cat
@@ -142,7 +137,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         titleText.setText(typeRes)
         infoType.setText(typeRes)
 
-        // Urgency (කලින් adapter එකේ වගේම)
         val (condColor, condLabel) = when (a.condition) {
             "critical" -> R.color.red to R.string.cond_critical
             "injured" -> R.color.limit_stock_color to R.string.cond_injured
@@ -156,7 +150,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         infoCondition.setText(condLabel)
         infoCondition.setTextColor(color)
 
-        // අවශ්‍යතාවය
         needPill.setText(
             when (a.needType) {
                 "home" -> R.string.need_home
@@ -167,7 +160,6 @@ class AnimalDetailActivity : AppCompatActivity() {
 
         infoStatus.text = statusLabel(a.status)
 
-        // Report කරපු වෙලාව
         val createdAt = a.createdAt
         timeText.text = if (createdAt != null) {
             DateUtils.getRelativeTimeSpanString(
@@ -192,7 +184,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         else -> "Reported"
     }
 
-    // ===================== Photo dots =====================
 
     private fun setupDots(count: Int) {
         dotsLayout.removeAllViews()
@@ -210,7 +201,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
         updateDots(0)
 
-        // photo එක swipe කරද්දී දැනට ඉන්න dot එක highlight කරනවා
         photoPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = updateDots(position)
         })
@@ -222,9 +212,7 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ===================== Map preview + directions =====================
 
-    // Lite mode map එකක් (සැහැල්ලුයි, tap කළාම Google Maps app එක open වෙනවා)
     private fun showMap(a: Animal) {
         val geo = a.location ?: return
         val position = LatLng(geo.latitude, geo.longitude)
@@ -241,7 +229,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // Google Maps app එකේ navigation එක open කරනවා. app එක නැත්නම් browser එකෙන්
     private fun openDirections(a: Animal) {
         val geo = a.location ?: return
         val navIntent = Intent(
@@ -259,9 +246,7 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ===================== Help flow =====================
 
-    // පහළ බටන් එක: ඔයාගේම report එකක්ද, adopt වෙලාද, නැත්නම් help කරන්න පුළුවන්ද
     private fun setupHelpButton(a: Animal) {
         val user = FirebaseAuth.getInstance().currentUser
         when {
@@ -285,7 +270,6 @@ class AnimalDetailActivity : AppCompatActivity() {
 
     private fun onHelpClicked(a: Animal) {
         val user = FirebaseAuth.getInstance().currentUser
-        // ලියාපදිංචි නැති (guest) නම් register වෙන්න කියනවා
         if (user == null || user.isAnonymous) {
             showRegisterDialog()
         } else {
@@ -313,7 +297,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         )
     }
 
-    // Help වර්ගය + message එක තෝරන bottom sheet එක
     private fun showHelpSheet(a: Animal) {
         val sheet = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.sheet_help_request, null)
@@ -341,7 +324,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         sheet.show()
     }
 
-    // helpRequests/{animalId}_{uid} ලෙස save කරනවා (එකම කෙනා එකම සතාට දෙපාරක් යවන්න බෑ)
     private fun submitHelpRequest(
         a: Animal,
         type: String,
@@ -373,7 +355,7 @@ class AnimalDetailActivity : AppCompatActivity() {
                     "helperEmail" to (user.email ?: ""),
                     "type" to type,
                     "message" to message,
-                    "status" to "pending",           // admin approve කරනකම් pending
+                    "status" to "pending",
                     "createdAt" to FieldValue.serverTimestamp()
                 )
                 ref.set(data)
@@ -392,7 +374,7 @@ class AnimalDetailActivity : AppCompatActivity() {
             }
     }
 
-    // ===================== Helpers =====================
+
 
     private fun dp(value: Int): Int =
         (value * resources.displayMetrics.density).roundToInt()
