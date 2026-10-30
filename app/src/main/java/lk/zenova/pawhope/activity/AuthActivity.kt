@@ -85,7 +85,6 @@ class AuthActivity : AppCompatActivity() {
         applyMode()
     }
 
-    // Sign up / Sign in අනුව text සහ fields පෙන්නන/සඟවන්න
     private fun applyMode() {
         titleText.setText(if (isSignUp) R.string.auth_signup_title else R.string.auth_signin_title)
         subtitleText.setText(if (isSignUp) R.string.auth_signup_sub else R.string.auth_signin_sub)
@@ -146,8 +145,7 @@ class AuthActivity : AppCompatActivity() {
         val current = auth.currentUser
 
         if (current != null && current.isAnonymous) {
-            // Guest account එක real account එකක් කරනවා.
-            // uid එක වෙනස් නොවෙන නිසා guest විදිහට කලින් දාපු reports ඒ කෙනාගේම.
+
             val credential = EmailAuthProvider.getCredential(email, password)
             current.linkWithCredential(credential)
                 .addOnSuccessListener { result ->
@@ -171,7 +169,6 @@ class AuthActivity : AppCompatActivity() {
             .addOnFailureListener { handleAuthError(it) }
     }
 
-    // ගිණුම හැදුවාම: නම set කරලා, profile එක Firestore (users/{uid}) එකට save කරනවා
     private fun onSignedUp(user: FirebaseUser, name: String, mobile: String, email: String) {
         user.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
 
@@ -185,8 +182,7 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
-    // වැදගත්: guest -> real account වුණාට පස්සේ token එකේ තාමත් "anonymous" කියලා තියෙනවා.
-    // අලුත් token එකක් ගන්නවා, නැත්නම් rules වලින් help request එක ප්‍රතික්ෂේප වෙනවා.
+
     private fun refreshTokenAndFinish(user: FirebaseUser) {
         user.getIdToken(true).addOnCompleteListener {
             setLoading(false)
