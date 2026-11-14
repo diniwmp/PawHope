@@ -6,7 +6,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.fragment.HomeFragment
-import lk.zenova.pawhope.fragment.PlaceholderFragment
+import lk.zenova.pawhope.fragment.NotificationsFragment
+import lk.zenova.pawhope.fragment.ProfileFragment
 import lk.zenova.pawhope.fragment.ReportFragment
 
 class MainActivity : AppCompatActivity() {
@@ -23,10 +24,8 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
                 R.id.nav_add -> loadFragment(ReportFragment())
-                R.id.nav_notifications ->
-                    loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_notifications)))
-                R.id.nav_profile ->
-                    loadFragment(PlaceholderFragment.newInstance(getString(R.string.nav_profile)))
+                R.id.nav_notifications -> loadFragment(NotificationsFragment())
+                R.id.nav_profile -> loadFragment(ProfileFragment())
             }
             true
         }

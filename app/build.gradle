@@ -13,7 +13,7 @@ if (localFile.exists()) {
 
 android {
     namespace 'lk.zenova.pawhope'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "lk.zenova.pawhope"
@@ -78,6 +78,7 @@ dependencies {
 
     // Third party
     implementation libs.glide
+    implementation libs.activity
     kapt libs.glide.compiler
     implementation libs.gson
     implementation libs.dotsindicator

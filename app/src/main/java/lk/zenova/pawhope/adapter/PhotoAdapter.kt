@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import lk.zenova.pawhope.R
 
-// Report form එකේ තෝරපු photos පෙන්නන small list එක
-// onRemove: X බටන් එක එබුවාම "කී වෙනි photo එකද" කියලා Fragment එකට කියනවා
+
 class PhotoAdapter(
     private val context: Context,
     private val onRemove: (Int) -> Unit
@@ -43,7 +42,6 @@ class PhotoAdapter(
         Glide.with(context).load(items[position]).into(holder.image)
 
         holder.remove.setOnClickListener {
-            // position එක scroll/remove නිසා වෙනස් වෙන්න පුළුවන්, ඒ නිසා දැන් තියෙන තැන අහනවා
             val pos = holder.bindingAdapterPosition
             if (pos != RecyclerView.NO_POSITION) onRemove(pos)
         }

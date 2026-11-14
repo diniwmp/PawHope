@@ -401,7 +401,6 @@ class ReportFragment : Fragment() {
         progressBar.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    // report එක සාර්ථක වුණාට පස්සේ form එක හිස් කරනවා
     private fun resetForm() {
         photos.clear()
         refreshPhotos()
@@ -421,7 +420,6 @@ class ReportFragment : Fragment() {
         btnPickLocation.setText(R.string.pin_location)
     }
 
-    // Fragment එක screen එකෙන් අයින් වුණාට පස්සේ app crash නොවෙන්න context? පාවිච්චි කරනවා
     private fun toast(message: String) {
         context?.let { Toast.makeText(it, message, Toast.LENGTH_SHORT).show() }
     }

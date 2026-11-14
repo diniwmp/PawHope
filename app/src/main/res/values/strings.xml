@@ -122,4 +122,15 @@
     <string name="hint_update_text">Add details</string>
     <string name="btn_add_photo">Add photo</string>
     <string name="btn_submit_update">Send</string>
+    <string name="own_report_label">Your report</string>
+
+    <string name="reg_title">Join the PawHope family</string>
+    <string name="reg_sub_help">Every animal deserves a safe home. We ask helpers to join PawHope so we can follow each animal\'s journey after they go home.</string>
+    <string name="reg_sub_own">You found this animal. Join PawHope to take care of it, and we\'ll help you track its health and vaccines.</string>
+    <string name="reg_benefit_1">We follow each animal\'s care and vaccines</string>
+    <string name="reg_benefit_2">Your reports stay safe and linked to you</string>
+    <string name="reg_benefit_3">Takes less than a minute</string>
+    <string name="reg_create">Create free account</string>
+    <string name="reg_signin">I already have an account</string>
+    <string name="reg_later">Maybe later</string>
 </resources>
