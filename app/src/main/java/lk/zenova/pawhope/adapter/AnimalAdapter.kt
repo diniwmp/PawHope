@@ -51,7 +51,6 @@ class AnimalAdapter(
     override fun onBindViewHolder(holder: VH, position: Int) {
         val animal = items[position]
 
-        // ---------- Photo ----------
         val firstPhoto = animal.photoUrls.firstOrNull()
         if (!firstPhoto.isNullOrEmpty()) {
             holder.image.clearColorFilter()
@@ -67,7 +66,6 @@ class AnimalAdapter(
             holder.image.setColorFilter(ContextCompat.getColor(context, R.color.primary_color))
         }
 
-        // ---------- Condition badge ----------
 
         val (condColor, condLabel) = when (animal.condition) {
             "critical" -> R.color.red to R.string.cond_critical
@@ -80,7 +78,6 @@ class AnimalAdapter(
         holder.badge.backgroundTintList =
             ColorStateList.valueOf(ContextCompat.getColor(context, condColor))
 
-        // ---------- Title ----------
         holder.title.setText(
             when (animal.animalType) {
                 "dog" -> R.string.type_dog
@@ -89,7 +86,6 @@ class AnimalAdapter(
             }
         )
 
-        // ---------- Need pill ----------
         holder.need.setText(
             when (animal.needType) {
                 "home" -> R.string.need_home
@@ -98,7 +94,6 @@ class AnimalAdapter(
             }
         )
 
-        // ---------- Description / Location ----------
         holder.description.text = animal.description
         holder.location.text = buildLocation(animal)
 
@@ -121,7 +116,7 @@ class AnimalAdapter(
         val district = animal.district
         return when {
             city.isNotEmpty() && district.isNotEmpty() &&
-                    !city.equals(district, ignoreCase = true) -> "$city, $district"   // "$city" = string template
+                    !city.equals(district, ignoreCase = true) -> "$city, $district"
             city.isNotEmpty() -> city
             district.isNotEmpty() -> district
             animal.address.isNotEmpty() -> animal.address

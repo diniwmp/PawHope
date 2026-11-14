@@ -60,7 +60,6 @@ class SplashActivity : AppCompatActivity() {
         handler.postDelayed({ goNext() }, SPLASH_DURATION)
     }
 
-    // Logo pop-in + text slide-up + paws fade-in
     private fun playIntro() {
         val logoIn = ObjectAnimator.ofPropertyValuesHolder(
             logo,
@@ -160,7 +159,6 @@ class SplashActivity : AppCompatActivity() {
             .start()
     }
 
-    // dp -> pixels
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
 
     override fun onDestroy() {

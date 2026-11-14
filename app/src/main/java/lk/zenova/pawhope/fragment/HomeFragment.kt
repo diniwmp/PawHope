@@ -89,7 +89,6 @@ class HomeFragment : Fragment() {
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(100)
             .addSnapshotListener { snapshot, error ->
-                // lambda එකෙන් එළියට යන්න "return@addSnapshotListener" කියනවා
                 if (!isAdded) return@addSnapshotListener
 
                 progressBar.visibility = View.GONE
@@ -98,7 +97,7 @@ class HomeFragment : Fragment() {
                 if (error != null) {
                     Toast.makeText(
                         requireContext(),
-                        "Couldn't load animals: ${error.message}",   // ${ } = string template
+                        "Couldn't load animals: ${error.message}",
                         Toast.LENGTH_LONG
                     ).show()
                     applyFilter()
@@ -121,11 +120,9 @@ class HomeFragment : Fragment() {
         registration = null
     }
 
-    // තෝරපු chip එකට අනුව list එක filter කරනවා
     private fun applyFilter() {
         val checked = chipGroup.checkedChipId
 
-        // filter { } = Java වල for loop + if + add කරන කොටස එක පේළියකින්
         val filtered = allAnimals.
         filter { matches(it, checked) }
             .sortedWith(
@@ -140,12 +137,11 @@ class HomeFragment : Fragment() {
         countText.text = getString(R.string.home_count, filtered.size)
     }
 
-    // අඩු අගය = වැඩි හදිසිය
     private fun urgencyRank(condition: String): Int = when (condition) {
         "critical" -> 0
         "injured" -> 1
         "sick", "needs_help" -> 2
-        else -> 3   // healthy
+        else -> 3
     }
 
     private fun matches(animal: Animal, checkedChipId: Int): Boolean = when (checkedChipId) {
@@ -153,6 +149,6 @@ class HomeFragment : Fragment() {
         R.id.chip_cats -> animal.animalType == "cat"
         R.id.chip_urgent -> animal.condition == "critical" || animal.condition == "injured"
         R.id.chip_home -> animal.needType == "home" || animal.needType == "both"
-        else -> true   // All
+        else -> true
     }
 }

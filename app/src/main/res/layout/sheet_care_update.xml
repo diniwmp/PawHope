@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/sheetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sheetSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+
+        <!-- Health report එකට පමණක් පෙනෙන කොටස -->
+        <LinearLayout
+            android:id="@+id/healthGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/SectionLabel"
+                android:text="@string/label_symptoms" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipSymptoms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipSpacingHorizontal="8dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_not_eating"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not eating" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_vomiting"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vomiting" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_diarrhea"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Diarrhea" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_limping"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Limping" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_skin"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skin or fur problem" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_sleepy"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Very sleepy" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_behavior"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unusual behavior" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_breathing"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Breathing problem" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sym_other"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <TextView
+                style="@style/SectionLabel"
+                android:text="@string/label_severity" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipSeverity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipSpacingHorizontal="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sev_mild"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mild" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sev_moderate"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moderate" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sev_severe"
+                    style="@style/Widget.PawHope.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Severe" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.PawHope.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/hint_update_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/updateTextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="3"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddPhoto"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_add_photo"
+                android:textColor="@color/primary_dark"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/primary_color"
+                app:strokeWidth="1.5dp" />
+
+            <ImageView
+                android:id="@+id/photoPreview"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="12dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmitUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_submit_update"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/primary_color"
+            app:cornerRadius="14dp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -32,11 +32,9 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.concurrent.thread
 
-// සතා ඉන්න තැන map එකෙන් තෝරන screen එක.
-// map එක move කරනකොට මැද pin එක ඉන්න තැන address එක ගන්නවා.
+
 class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    // මේ activity එකෙන් Report screen එකට දෙන දත්ත වල keys
     companion object {
         const val EXTRA_LAT = "lat"
         const val EXTRA_LNG = "lng"
@@ -44,7 +42,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
         const val EXTRA_CITY = "city"
         const val EXTRA_DISTRICT = "district"
 
-        // permission නැති නම්/GPS නැති නම් මුලින්ම පෙන්නන තැන: කොළඹ
         private val DEFAULT_LOCATION = LatLng(6.9271, 79.8612)
     }
 
@@ -56,16 +53,13 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var searchInput: EditText
     private lateinit var btnConfirm: MaterialButton
 
-    // දැනට pin එක ඉන්න තැන
     private var currentLatLng: LatLng = DEFAULT_LOCATION
     private var currentAddress = ""
     private var currentCity = ""
     private var currentDistrict = ""
 
-    // address එක හොයන request එකක් පරණ වුණාම (map එක නැවත move වුණාම) එහි ප්‍රතිඵලය අත්හරින්න
     private var geocodeRequestId = 0
 
-    // Location permission ඉල්ලන launcher එක. FINE හෝ COARSE එකක් ලැබුණත් ඇති
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { results ->
@@ -96,7 +90,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
             moveToMyLocation()
         }
 
-        // keyboard එකේ "search" බටන් එක එබුවාමත් හොයනවා
         searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 searchAddress(searchInput.text.toString())
@@ -108,22 +101,19 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
 
         btnConfirm.setOnClickListener { returnResult() }
 
-        // Map fragment එක load කරනවා. ලෑස්ති වුණාම onMapReady() call වෙනවා
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        googleMap.uiSettings.isMyLocationButtonEnabled = false   // අපේම FAB එක තියෙන නිසා
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
         googleMap.uiSettings.isZoomControlsEnabled = false
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f))
 
-        // map එක move වෙන්න පටන් ගත්තාම "Finding address…" පෙන්නනවා
         googleMap.setOnCameraMoveStartedListener {
             addressText.setText(R.string.finding_address)
         }
-        // map එක නැවතුණාම මැද තැනේ address එක හොයනවා
         googleMap.setOnCameraIdleListener {
             currentLatLng = googleMap.cameraPosition.target
             updateAddress(currentLatLng)
@@ -145,13 +135,11 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
         return fine == PackageManager.PERMISSION_GRANTED || coarse == PackageManager.PERMISSION_GRANTED
     }
 
-    // ඔයාගේ තැන නිල් තිතක් විදිහට map එකේ පෙන්නනවා
     @SuppressLint("MissingPermission")
     private fun enableMyLocationLayer() {
         map?.isMyLocationEnabled = true
     }
 
-    // දැන් ඉන්න තැනට map එක අරන් යනවා
     @SuppressLint("MissingPermission")
     private fun moveToMyLocation() {
         if (!hasLocationPermission()) {
@@ -171,7 +159,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
-    // lat/lng එකකින් address එක ගන්නවා (Geocoder = network call, ඒ නිසා background thread එකේ)
     @Suppress("DEPRECATION")
     private fun updateAddress(latLng: LatLng) {
         val requestId = ++geocodeRequestId
@@ -189,17 +176,14 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (a != null) {
                         line = a.getAddressLine(0) ?: ""
                         city = a.locality ?: a.subLocality ?: ""
-                        // Google දෙන්නේ "Colombo District" වගේ, ඒ නිසා " District" අයින් කරනවා
                         district = (a.subAdminArea ?: a.adminArea ?: "").removeSuffix(" District")
                     }
                 }
             } catch (e: IOException) {
-                // internet ප්‍රශ්නයක්. address හිස්ව තියෙනවා, coordinates තියෙනවා
             }
 
-            // UI update කරන්න ඕනි main thread එකේ
             runOnUiThread {
-                if (requestId != geocodeRequestId) return@runOnUiThread   // පරණ result එකක්, අත්හරිනවා
+                if (requestId != geocodeRequestId) return@runOnUiThread
                 currentAddress = line
                 currentCity = city
                 currentDistrict = district
@@ -208,7 +192,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // search bar එකේ ලියපු තැන හොයනවා
     @Suppress("DEPRECATION")
     private fun searchAddress(query: String) {
         if (query.isBlank()) return
@@ -216,7 +199,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
 
         thread {
             val results: List<Address> = try {
-                // ශ්‍රී ලංකාව ඇතුළත විතරක් හොයනවා (lat 5.8–9.95, lng 79.4–82.0)
                 Geocoder(this, Locale.getDefault())
                     .getFromLocationName(query, 5, 5.8, 79.4, 9.95, 82.0) ?: emptyList()
             } catch (e: IOException) {
@@ -231,7 +213,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
             0 -> toast("No places found")
             1 -> moveTo(results[0])
             else -> {
-                // ප්‍රතිඵල කිහිපයක් නම් list එකකින් තෝරන්න දෙනවා
                 val labels = results.map { it.getAddressLine(0) ?: it.featureName ?: "Unknown" }
                 MaterialAlertDialogBuilder(this)
                     .setTitle("Select a place")
@@ -246,7 +227,6 @@ class LocationPickerActivity : AppCompatActivity(), OnMapReadyCallback {
         map?.animateCamera(CameraUpdateFactory.newLatLngZoom(target, 17f))
     }
 
-    // තෝරපු තැන Report screen එකට යවනවා
     private fun returnResult() {
         val result = Intent().apply {
             putExtra(EXTRA_LAT, currentLatLng.latitude)

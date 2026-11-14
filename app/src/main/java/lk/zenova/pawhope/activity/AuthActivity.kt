@@ -21,8 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.model.User
 
-// Sign up සහ Sign in එකම screen එකේ. mode එක මාරු කරන්න පුළුවන්.
-// සාර්ථක වුණාම RESULT_OK එක්ක ආපහු යනවා (Detail screen එකට)
+
 class AuthActivity : AppCompatActivity() {
 
     companion object {
