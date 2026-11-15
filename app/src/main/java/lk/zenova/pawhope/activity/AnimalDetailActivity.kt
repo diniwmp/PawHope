@@ -32,7 +32,6 @@ import lk.zenova.pawhope.adapter.PhotoPagerAdapter
 import lk.zenova.pawhope.model.Animal
 import kotlin.math.roundToInt
 
-// සතෙක්ගේ සම්පූර්ණ විස්තර බලන screen එක (GoMart වල single product view එක වගේ)
 class AnimalDetailActivity : AppCompatActivity() {
 
     companion object {
@@ -49,7 +48,7 @@ class AnimalDetailActivity : AppCompatActivity() {
     private lateinit var titleText: TextView
     private lateinit var timeText: TextView
     private lateinit var needPill: TextView
-    private lateinit var ownBadge: TextView          // "Your report" badge එක
+    private lateinit var ownBadge: TextView
     private lateinit var infoType: TextView
     private lateinit var infoCondition: TextView
     private lateinit var infoStatus: TextView
@@ -59,12 +58,11 @@ class AnimalDetailActivity : AppCompatActivity() {
     private lateinit var noteText: TextView
     private lateinit var photoAdapter: PhotoPagerAdapter
 
-    // Sign up / Sign in screen එකෙන් ආපහු ආවම: සාර්ථක නම් help sheet එක පෙන්නනවා
     private val authLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 animal?.let {
-                    setupHelpButton(it)   // user මාරු වුණාම "Your report" badge එක නැවත පරීක්ෂා කරනවා
+                    setupHelpButton(it)
                     showHelpSheet(it)
                 }
             }
@@ -108,7 +106,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         loadAnimal(animalId)
     }
 
-    // Firestore එකෙන් ඒ සතාගේ document එක ගන්නවා
     private fun loadAnimal(animalId: String) {
         FirebaseFirestore.getInstance().collection("animals").document(animalId).get()
             .addOnSuccessListener { doc ->
@@ -130,14 +127,11 @@ class AnimalDetailActivity : AppCompatActivity() {
             }
     }
 
-    // ===================== UI පුරවනවා =====================
 
     private fun bindAnimal(a: Animal) {
-        // Photos + dots
         photoAdapter.setItems(a.photoUrls)
         setupDots(a.photoUrls.size)
 
-        // සතාගේ වර්ගය
         val typeRes = when (a.animalType) {
             "dog" -> R.string.type_dog
             "cat" -> R.string.type_cat
@@ -146,7 +140,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         titleText.setText(typeRes)
         infoType.setText(typeRes)
 
-        // Urgency
         val (condColor, condLabel) = when (a.condition) {
             "critical" -> R.color.red to R.string.cond_critical
             "injured" -> R.color.limit_stock_color to R.string.cond_injured
@@ -160,7 +153,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         infoCondition.setText(condLabel)
         infoCondition.setTextColor(color)
 
-        // අවශ්‍යතාවය
         needPill.setText(
             when (a.needType) {
                 "home" -> R.string.need_home
@@ -171,7 +163,6 @@ class AnimalDetailActivity : AppCompatActivity() {
 
         infoStatus.text = statusLabel(a.status)
 
-        // Report කරපු වෙලාව
         val createdAt = a.createdAt
         timeText.text = if (createdAt != null) {
             DateUtils.getRelativeTimeSpanString(
@@ -196,7 +187,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         else -> "Reported"
     }
 
-    // ===================== Photo dots =====================
 
     private fun setupDots(count: Int) {
         dotsLayout.removeAllViews()
@@ -225,7 +215,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ===================== Map preview + directions =====================
 
     private fun showMap(a: Animal) {
         val geo = a.location ?: return
@@ -260,14 +249,11 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ===================== Help flow =====================
 
-    // පහළ බටන් එක: adopt වෙලා නම් පණිවිඩයක්, නැත්නම් (ඔයාගේ report එක වුණත්) help බටන් එක
     private fun setupHelpButton(a: Animal) {
         val user = FirebaseAuth.getInstance().currentUser
         val isOwn = user != null && user.uid == a.reporterId
 
-        // ඔයාගේම report එකක් නම් "Your report" badge එක පෙන්නනවා (බටන් එක සඟවන්නේ නෑ)
         ownBadge.visibility = if (isOwn) View.VISIBLE else View.GONE
 
         if (a.status == "adopted") {
@@ -284,7 +270,6 @@ class AnimalDetailActivity : AppCompatActivity() {
 
     private fun onHelpClicked(a: Animal) {
         val user = FirebaseAuth.getInstance().currentUser
-        // ලියාපදිංචි නැති (guest) නම් register වෙන්න කියනවා
         if (user == null || user.isAnonymous) {
             val isOwn = user != null && user.uid == a.reporterId
             showRegisterSheet(isOwn)
@@ -293,13 +278,11 @@ class AnimalDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ලියාපදිංචි වෙන්න ආරාධනා කරන ලස්සන bottom sheet එක
     private fun showRegisterSheet(isOwnReport: Boolean) {
         val sheet = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.sheet_register_prompt, null)
         sheet.setContentView(view)
 
-        // ඔයාගේම report එකක් නම් වෙනස් වචන පෙන්නනවා
         view.findViewById<TextView>(R.id.regSubtitle).setText(
             if (isOwnReport) R.string.reg_sub_own else R.string.reg_sub_help
         )
@@ -323,7 +306,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         )
     }
 
-    // Help වර්ගය + message එක තෝරන bottom sheet එක
     private fun showHelpSheet(a: Animal) {
         val sheet = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.sheet_help_request, null)
@@ -351,7 +333,6 @@ class AnimalDetailActivity : AppCompatActivity() {
         sheet.show()
     }
 
-    // helpRequests/{animalId}_{uid} ලෙස save කරනවා (එකම කෙනා එකම සතාට දෙපාරක් යවන්න බෑ)
     private fun submitHelpRequest(
         a: Animal,
         type: String,
@@ -383,7 +364,7 @@ class AnimalDetailActivity : AppCompatActivity() {
                     "helperEmail" to (user.email ?: ""),
                     "type" to type,
                     "message" to message,
-                    "status" to "pending",           // admin approve කරනකම් pending
+                    "status" to "pending",           
                     "createdAt" to FieldValue.serverTimestamp()
                 )
                 ref.set(data)
@@ -402,7 +383,6 @@ class AnimalDetailActivity : AppCompatActivity() {
             }
     }
 
-    // ===================== Helpers =====================
 
     private fun dp(value: Int): Int =
         (value * resources.displayMetrics.density).roundToInt()
