@@ -364,7 +364,7 @@ class AnimalDetailActivity : AppCompatActivity() {
                     "helperEmail" to (user.email ?: ""),
                     "type" to type,
                     "message" to message,
-                    "status" to "pending",           
+                    "status" to "pending",
                     "createdAt" to FieldValue.serverTimestamp()
                 )
                 ref.set(data)
