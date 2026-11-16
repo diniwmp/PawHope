@@ -26,7 +26,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!-- Photos -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="300dp">
@@ -60,7 +59,6 @@
                         android:orientation="horizontal" />
                 </FrameLayout>
 
-                <!-- විස්තර කොටස (photo එක උඩින් ටිකක් overlap වෙනවා) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,7 +110,6 @@
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
-                        <!-- ඔයාගේම report එකක් නම් පමණක් පෙනෙනවා -->
                         <TextView
                             android:id="@+id/ownBadge"
                             android:layout_width="wrap_content"
@@ -130,7 +127,6 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
-                    <!-- කෙටි info කාඩ් තුන -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -215,7 +211,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- About -->
                     <TextView
                         style="@style/SectionLabel"
                         android:text="@string/detail_about" />
@@ -228,7 +223,6 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="15sp" />
 
-                    <!-- Location -->
                     <TextView
                         style="@style/SectionLabel"
                         android:text="@string/detail_location" />
@@ -265,7 +259,6 @@
                         app:strokeColor="@color/divider_color"
                         app:strokeWidth="1dp">
 
-                        <!-- map fragment එක code එකෙන් මෙතනට දානවා -->
                         <FrameLayout
                             android:id="@+id/mapContainer"
                             android:layout_width="match_parent"
@@ -286,7 +279,6 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <!-- පහළ බටන් එක -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

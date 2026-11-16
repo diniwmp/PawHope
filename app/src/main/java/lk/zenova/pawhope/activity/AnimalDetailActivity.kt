@@ -279,7 +279,7 @@ class AnimalDetailActivity : AppCompatActivity() {
     }
 
     private fun showRegisterSheet(isOwnReport: Boolean) {
-        val sheet = BottomSheetDialog(this)
+        val sheet = BottomSheetDialog(this, R.style.ThemeOverlay_PawHope_BottomSheetLight)
         val view = layoutInflater.inflate(R.layout.sheet_register_prompt, null)
         sheet.setContentView(view)
 
@@ -364,7 +364,7 @@ class AnimalDetailActivity : AppCompatActivity() {
                     "helperEmail" to (user.email ?: ""),
                     "type" to type,
                     "message" to message,
-                    "status" to "pending",           
+                    "status" to "pending",
                     "createdAt" to FieldValue.serverTimestamp()
                 )
                 ref.set(data)

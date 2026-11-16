@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.model.CareUpdate
+import lk.zenova.pawhope.util.CareUi
 
 class UpdateAdapter(private val context: Context) :
     RecyclerView.Adapter<UpdateAdapter.VH>() {
@@ -31,11 +32,17 @@ class UpdateAdapter(private val context: Context) :
         val iconCircle: View = view.findViewById(R.id.updIconCircle)
         val title: TextView = view.findViewById(R.id.updTitle)
         val date: TextView = view.findViewById(R.id.updDate)
+        val details: TextView = view.findViewById(R.id.updDetails)
         val text: TextView = view.findViewById(R.id.updText)
         val symptoms: TextView = view.findViewById(R.id.updSymptoms)
         val severity: TextView = view.findViewById(R.id.updSeverity)
         val status: TextView = view.findViewById(R.id.updStatus)
-        val photo: ImageView = view.findViewById(R.id.updPhoto)
+        val photosRow: View = view.findViewById(R.id.updPhotos)
+        val photoViews: List<ImageView> = listOf(
+            view.findViewById(R.id.updPhoto1),
+            view.findViewById(R.id.updPhoto2),
+            view.findViewById(R.id.updPhoto3)
+        )
         val replyBox: View = view.findViewById(R.id.updReplyBox)
         val replyText: TextView = view.findViewById(R.id.updReplyText)
     }
@@ -55,8 +62,8 @@ class UpdateAdapter(private val context: Context) :
         val u = items[position]
         val isHealth = u.type == "health"
 
-        tint(holder.iconCircle, if (isHealth) R.color.red else R.color.primary_dark)
-        holder.title.text = if (isHealth) "Health concern" else "Care update"
+        holder.title.text = CareUi.reportTitle(u.type)
+        tint(holder.iconCircle, CareUi.reportColor(u.type))
 
         val createdAt = u.createdAt
         holder.date.text = if (createdAt != null) {
@@ -66,6 +73,12 @@ class UpdateAdapter(private val context: Context) :
         } else {
             context.getString(R.string.just_now)
         }
+
+        val lines = CareUi.detailLabels.mapNotNull { (key, label) ->
+            u.details[key]?.takeIf { it.isNotBlank() }?.let { "$label: $it" }
+        }
+        holder.details.text = lines.joinToString("\n")
+        holder.details.visibility = if (lines.isEmpty()) View.GONE else View.VISIBLE
 
         holder.text.text = u.text
         holder.text.visibility = if (u.text.isEmpty()) View.GONE else View.VISIBLE
@@ -100,12 +113,17 @@ class UpdateAdapter(private val context: Context) :
             holder.status.visibility = View.GONE
         }
 
-        if (u.photoUrl.isNotEmpty()) {
-            holder.photo.visibility = View.VISIBLE
-            Glide.with(context).load(u.photoUrl).into(holder.photo)
-        } else {
-            Glide.with(context).clear(holder.photo)
-            holder.photo.visibility = View.GONE
+        val urls = if (u.photoUrls.isNotEmpty()) u.photoUrls else listOfNotNull(u.photoUrl.ifEmpty { null })
+        holder.photosRow.visibility = if (urls.isEmpty()) View.GONE else View.VISIBLE
+        holder.photoViews.forEachIndexed { i, imageView ->
+            val url = urls.getOrNull(i)
+            if (url != null) {
+                imageView.visibility = View.VISIBLE
+                Glide.with(context).load(url).into(imageView)
+            } else {
+                Glide.with(context).clear(imageView)
+                imageView.visibility = View.GONE
+            }
         }
 
         if (u.adminReply.isNotEmpty()) {
