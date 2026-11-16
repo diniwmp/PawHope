@@ -91,6 +91,19 @@
                 android:visibility="gone" />
         </LinearLayout>
 
+        <!-- වර්ගය අනුව විස්තර (බර, vaccine නම, clinic ...) -->
+        <TextView
+            android:id="@+id/updDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_info_card"
+            android:lineSpacingExtra="3dp"
+            android:padding="10dp"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/updSymptoms"
             android:layout_width="match_parent"
@@ -110,14 +123,44 @@
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
-        <ImageView
-            android:id="@+id/updPhoto"
+        <!-- Photos (උපරිම 3ක්) -->
+        <LinearLayout
+            android:id="@+id/updPhotos"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/updPhoto1"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/updPhoto2"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/updPhoto3"
+                android:layout_width="0dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <!-- Admin ගේ පිළිතුර -->
         <LinearLayout
