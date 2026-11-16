@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/help_sheet_title"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/help_sheet_sub"
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/text_grey"
         android:textSize="13sp" />
 
     <com.google.android.material.chip.ChipGroup
@@ -32,7 +32,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_h_adopt"
-            style="@style/Widget.PawHope.Chip"
+            style="@style/Widget.PawHope.Chip.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
@@ -40,28 +40,28 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_h_foster"
-            style="@style/Widget.PawHope.Chip"
+            style="@style/Widget.PawHope.Chip.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/help_foster" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_h_food"
-            style="@style/Widget.PawHope.Chip"
+            style="@style/Widget.PawHope.Chip.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/help_food" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_h_medical"
-            style="@style/Widget.PawHope.Chip"
+            style="@style/Widget.PawHope.Chip.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/help_medical" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_h_visit"
-            style="@style/Widget.PawHope.Chip"
+            style="@style/Widget.PawHope.Chip.Light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/help_visit" />
@@ -80,7 +80,8 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:inputType="textMultiLine|textCapSentences"
-            android:minLines="3" />
+            android:minLines="3"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

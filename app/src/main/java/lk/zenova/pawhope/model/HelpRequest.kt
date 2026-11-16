@@ -13,5 +13,12 @@ data class HelpRequest(
     var type: String = "",                 // adopt | foster | food | medical | visit
     var message: String = "",
     var status: String = "pending",        // pending | approved | rejected | completed
-    @ServerTimestamp var createdAt: Date? = null
+    @ServerTimestamp var createdAt: Date? = null,
+
+    var handoverDone: Boolean = false,
+    var handoverAt: Date? = null,
+    var handover: Map<String, Any> = emptyMap(),
+
+    var lastCheckInAt: Date? = null,
+    var nextCheckInDue: Date? = null
 )

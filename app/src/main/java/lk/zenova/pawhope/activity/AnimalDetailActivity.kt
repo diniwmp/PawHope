@@ -279,7 +279,7 @@ class AnimalDetailActivity : AppCompatActivity() {
     }
 
     private fun showRegisterSheet(isOwnReport: Boolean) {
-        val sheet = BottomSheetDialog(this)
+        val sheet = BottomSheetDialog(this, R.style.ThemeOverlay_PawHope_BottomSheetLight)
         val view = layoutInflater.inflate(R.layout.sheet_register_prompt, null)
         sheet.setContentView(view)
 
