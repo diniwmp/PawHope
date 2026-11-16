@@ -91,7 +91,6 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- වර්ගය අනුව විස්තර (බර, vaccine නම, clinic ...) -->
         <TextView
             android:id="@+id/updDetails"
             android:layout_width="match_parent"
@@ -123,7 +122,6 @@
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
-        <!-- Photos (උපරිම 3ක්) -->
         <LinearLayout
             android:id="@+id/updPhotos"
             android:layout_width="match_parent"
@@ -162,7 +160,6 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- Admin ගේ පිළිතුර -->
         <LinearLayout
             android:id="@+id/updReplyBox"
             android:layout_width="match_parent"

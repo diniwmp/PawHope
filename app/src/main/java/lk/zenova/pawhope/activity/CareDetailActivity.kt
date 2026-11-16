@@ -2,6 +2,7 @@ package lk.zenova.pawhope.activity
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -29,7 +30,8 @@ import lk.zenova.pawhope.model.Vaccination
 import lk.zenova.pawhope.util.CareUi
 import kotlin.math.ceil
 
-
+// Care dashboard: ඔයා උදව් කරන සතා ගැන සියල්ල
+// (journey, adoption details, vaccines, monthly check-ins, vet visits, health reports)
 class CareDetailActivity : AppCompatActivity() {
 
     companion object {
@@ -47,6 +49,8 @@ class CareDetailActivity : AppCompatActivity() {
     private lateinit var contentScroll: View
     private lateinit var careGroup: View
     private lateinit var handoverCard: View
+    private lateinit var journeyCard: View
+    private lateinit var journeySteps: List<TextView>
     private lateinit var checkInBanner: MaterialCardView
     private lateinit var checkInText: TextView
     private lateinit var careImage: ImageView
@@ -75,6 +79,13 @@ class CareDetailActivity : AppCompatActivity() {
         contentScroll = findViewById(R.id.contentScroll)
         careGroup = findViewById(R.id.careGroup)
         handoverCard = findViewById(R.id.handoverCard)
+        journeyCard = findViewById(R.id.journeyCard)
+        journeySteps = listOf(
+            findViewById(R.id.journeyStep1),
+            findViewById(R.id.journeyStep2),
+            findViewById(R.id.journeyStep3),
+            findViewById(R.id.journeyStep4)
+        )
         checkInBanner = findViewById(R.id.checkInBanner)
         checkInText = findViewById(R.id.checkInText)
         careImage = findViewById(R.id.careImage)
@@ -95,6 +106,7 @@ class CareDetailActivity : AppCompatActivity() {
             )
         }
 
+        // Reports යවන්න (වර්ගයක් තෝරලා)
         findViewById<View>(R.id.tileMonthly).setOnClickListener { openReport("monthly") }
         findViewById<View>(R.id.btnCheckIn).setOnClickListener { openReport("monthly") }
         findViewById<View>(R.id.tileVaccine).setOnClickListener { openReport("vaccine") }
@@ -102,12 +114,14 @@ class CareDetailActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileHealth).setOnClickListener { openReport("health") }
         findViewById<View>(R.id.btnQuickUpdate).setOnClickListener { openReport("update") }
 
+        // Vaccines list
         vaccineAdapter = VaccinationAdapter(this) { v -> confirmVaccineDone(v) }
         val vaccineRecycler = findViewById<RecyclerView>(R.id.vaccineRecycler)
         vaccineRecycler.layoutManager = LinearLayoutManager(this)
         vaccineRecycler.adapter = vaccineAdapter
         vaccineRecycler.isNestedScrollingEnabled = false
 
+        // Reports timeline
         updateAdapter = UpdateAdapter(this)
         val updateRecycler = findViewById<RecyclerView>(R.id.updateRecycler)
         updateRecycler.layoutManager = LinearLayoutManager(this)
@@ -115,6 +129,7 @@ class CareDetailActivity : AppCompatActivity() {
         updateRecycler.isNestedScrollingEnabled = false
     }
 
+    // Form එකෙන් / report එකෙන් ආපහු ආවම නැවත load කරනවා (වෙනස්කම් පෙන්නන්න)
     override fun onStart() {
         super.onStart()
         loadRequest()
@@ -135,12 +150,20 @@ class CareDetailActivity : AppCompatActivity() {
         )
     }
 
+    // ===================== Load =====================
 
     private fun loadRequest() {
         db.collection("helpRequests").document(requestId).get()
             .addOnSuccessListener { doc ->
-                val request = doc.toObject(HelpRequest::class.java)
+                if (isFinishing || isDestroyed) return@addOnSuccessListener
+
+                // data කියවද්දී error එකක් ආවොත් crash නොවී හේතුව පෙන්නනවා
+                val request = runCatching { doc.toObject(HelpRequest::class.java) }
+                    .onFailure { toast("Couldn't read this offer: ${it.message}") }
+                    .getOrNull()
+
                 if (request == null) {
+                    progressBar.visibility = View.GONE
                     toast("This offer is no longer available")
                     finish()
                     return@addOnSuccessListener
@@ -150,6 +173,7 @@ class CareDetailActivity : AppCompatActivity() {
                 loadAnimal(request.animalId)
             }
             .addOnFailureListener { e ->
+                if (isFinishing || isDestroyed) return@addOnFailureListener
                 progressBar.visibility = View.GONE
                 toast("Couldn't load: ${e.message}")
                 finish()
@@ -159,23 +183,26 @@ class CareDetailActivity : AppCompatActivity() {
     private fun loadAnimal(animalId: String) {
         db.collection("animals").document(animalId).get()
             .addOnSuccessListener { doc ->
+                if (isFinishing || isDestroyed) return@addOnSuccessListener
                 progressBar.visibility = View.GONE
                 contentScroll.visibility = View.VISIBLE
-                bindAnimal(doc.toObject(Animal::class.java))
+                bindAnimal(runCatching { doc.toObject(Animal::class.java) }.getOrNull())
             }
             .addOnFailureListener {
+                if (isFinishing || isDestroyed) return@addOnFailureListener
                 progressBar.visibility = View.GONE
                 contentScroll.visibility = View.VISIBLE
                 bindAnimal(null)
             }
     }
 
+    // ===================== Bind =====================
 
     private fun bindRequest(r: HelpRequest) {
         careOffer.text = "Your offer: ${CareUi.helpTypeLabel(r.type)}"
-        careStatus.text = CareUi.requestStatusLabel(r.status)
+        careStatus.text = CareUi.careStateLabel(r)
         careStatus.backgroundTintList = ColorStateList.valueOf(
-            ContextCompat.getColor(this, CareUi.requestStatusColor(r.status))
+            ContextCompat.getColor(this, CareUi.careStateColor(r))
         )
 
         val approved = r.status == "approved"
@@ -192,12 +219,16 @@ class CareDetailActivity : AppCompatActivity() {
                         "but you can still help other animals."
             r.status == "completed" ->
                 "This care journey is complete. Thank you for giving this animal a safe home."
-            else -> "The PawHope team is reviewing your offer and will contact you soon."
+            else -> "The PawHope team is reviewing your offer and will contact you soon. " +
+                    "You'll be able to add your adoption details once it's approved."
         }
+
+        bindJourney(r)
 
         // approve වෙලා, details පුරවලා නැත්නම් පමණක් form card එක
         handoverCard.visibility = if (approved && !r.handoverDone) View.VISIBLE else View.GONE
 
+        // details පුරවපු පස්සේ විතරක් reports කොටස
         if (approved && r.handoverDone) {
             careGroup.visibility = View.VISIBLE
             updateCheckInBanner(r)
@@ -208,6 +239,40 @@ class CareDetailActivity : AppCompatActivity() {
         }
     }
 
+    // "Care journey" පියවර card එක: ✓ ඉවරයි, ➜ දැන් මේක, ○ තව
+    private fun bindJourney(r: HelpRequest) {
+        val approved = r.status == "approved"
+        val show = r.status == "pending" || (approved && !r.handoverDone)
+        journeyCard.visibility = if (show) View.VISIBLE else View.GONE
+        if (!show) return
+
+        val labels = listOf(
+            "Offer sent",
+            "Reviewed by the PawHope team",
+            "Adoption details (photo, home, promise)",
+            "Monthly reports, vaccines & vet visits"
+        )
+        val current = if (approved) 3 else 2   // දැන් ඉන්න පියවර
+
+        journeySteps.forEachIndexed { index, textView ->
+            val number = index + 1
+            val mark = when {
+                number < current -> "✓"
+                number == current -> "➜"
+                else -> "○"
+            }
+            textView.text = "$mark  ${labels[index]}"
+            textView.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    if (number <= current) R.color.text_primary else R.color.text_hint
+                )
+            )
+            textView.setTypeface(null, if (number == current) Typeface.BOLD else Typeface.NORMAL)
+        }
+    }
+
+    // ඊළඟ මාසික check-in එකට ඉතිරි දවස් ගණන (රතු = පරක්කු, කහ = ළඟයි)
     private fun updateCheckInBanner(r: HelpRequest) {
         val due = r.nextCheckInDue
         if (due == null) {
@@ -239,9 +304,10 @@ class CareDetailActivity : AppCompatActivity() {
         }
     }
 
+    // ===================== Real-time listeners =====================
 
     private fun startListeners() {
-        stopListeners()
+        stopListeners()   // දෙපාරක් listen නොවෙන්න කලින් ඒවා නවත්තනවා
         val reqRef = db.collection("helpRequests").document(requestId)
 
         updatesReg = reqRef.collection("updates")
@@ -274,6 +340,7 @@ class CareDetailActivity : AppCompatActivity() {
         vaccinesReg = null
     }
 
+    // ===================== Vaccine "Mark as given" =====================
 
     private fun confirmVaccineDone(v: Vaccination) {
         MaterialAlertDialogBuilder(this)

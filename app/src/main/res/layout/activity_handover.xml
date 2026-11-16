@@ -49,7 +49,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Photo -->
+
             <com.google.android.material.card.MaterialCardView
                 style="@style/ReportCard"
                 android:layout_marginTop="0dp">
@@ -124,7 +124,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- About the animal -->
+
             <com.google.android.material.card.MaterialCardView style="@style/ReportCard">
 
                 <LinearLayout
@@ -235,7 +235,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Home -->
+
             <com.google.android.material.card.MaterialCardView style="@style/ReportCard">
 
                 <LinearLayout
@@ -346,7 +346,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Note + promise -->
+
             <com.google.android.material.card.MaterialCardView style="@style/ReportCard">
 
                 <LinearLayout

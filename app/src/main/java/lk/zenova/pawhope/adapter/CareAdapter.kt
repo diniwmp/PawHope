@@ -3,7 +3,6 @@ package lk.zenova.pawhope.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.model.CareItem
+import lk.zenova.pawhope.model.HelpRequest
 import lk.zenova.pawhope.util.CareUi
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
+// "My care" list එකේ සතා කාඩ් එක
 class CareAdapter(
     private val context: Context,
     private val onClick: (CareItem) -> Unit
@@ -36,7 +38,7 @@ class CareAdapter(
         val title: TextView = view.findViewById(R.id.careTitle)
         val status: TextView = view.findViewById(R.id.careStatus)
         val offer: TextView = view.findViewById(R.id.careOffer)
-        val date: TextView = view.findViewById(R.id.careDate)
+        val hint: TextView = view.findViewById(R.id.careDate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -51,8 +53,10 @@ class CareAdapter(
         val request = item.request
         val animal = item.animal
 
+        // සතාගේ වර්ගය (සතාව delete වෙලා නම් "Animal")
         holder.title.setText(CareUi.animalTypeRes(animal?.animalType ?: ""))
 
+        // Photo
         val photo = animal?.photoUrls?.firstOrNull()
         if (!photo.isNullOrEmpty()) {
             holder.image.clearColorFilter()
@@ -68,22 +72,40 @@ class CareAdapter(
             holder.image.setColorFilter(ContextCompat.getColor(context, R.color.primary_color))
         }
 
-        holder.status.text = CareUi.requestStatusLabel(request.status)
+        // තත්වය: Details needed / In your care / Under review ...
+        holder.status.text = CareUi.careStateLabel(request)
         holder.status.backgroundTintList = ColorStateList.valueOf(
-            ContextCompat.getColor(context, CareUi.requestStatusColor(request.status))
+            ContextCompat.getColor(context, CareUi.careStateColor(request))
         )
 
         holder.offer.text = "Your offer: ${CareUi.helpTypeLabel(request.type)}"
 
-        val createdAt = request.createdAt
-        holder.date.text = if (createdAt != null) {
-            DateUtils.getRelativeTimeSpanString(
-                createdAt.time, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
-            )
-        } else {
-            context.getString(R.string.just_now)
-        }
+        // ඊළඟට කළ යුතු දේ පිළිබඳ කෙටි උපදෙසක්
+        val (hintText, overdue) = hintFor(request)
+        holder.hint.text = hintText
+        holder.hint.setTextColor(
+            ContextCompat.getColor(context, if (overdue) R.color.red else R.color.text_hint)
+        )
 
         holder.itemView.setOnClickListener { onClick(item) }
+    }
+
+    // (උපදෙස් text එක, පරක්කුද කියලා) යුගලයක් දෙනවා
+    private fun hintFor(r: HelpRequest): Pair<String, Boolean> = when {
+        r.status == "approved" && !r.handoverDone ->
+            "Tap to complete your adoption details" to false
+        r.status == "approved" -> {
+            val due = r.nextCheckInDue
+            if (due == null) {
+                "Tap to open your care dashboard" to false
+            } else {
+                val days = ceil((due.time - System.currentTimeMillis()) / 86_400_000.0).toInt()
+                if (days < 0) "Monthly check-in is overdue" to true
+                else "Next check-in in $days days" to false
+            }
+        }
+        r.status == "pending" -> "Waiting for the PawHope team to review" to false
+        r.status == "rejected" -> "This offer wasn't approved" to false
+        else -> "Care journey complete" to false
     }
 }

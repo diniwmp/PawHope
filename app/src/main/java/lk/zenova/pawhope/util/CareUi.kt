@@ -1,5 +1,5 @@
 package lk.zenova.pawhope.util
-
+import lk.zenova.pawhope.model.HelpRequest
 import lk.zenova.pawhope.R
 
 object CareUi {
@@ -63,4 +63,17 @@ object CareUi {
         "treatment" to "Treatment / medicine",
         "cost" to "Cost (LKR)"
     )
+
+
+    fun careStateLabel(r: HelpRequest): String = when {
+        r.status == "approved" && !r.handoverDone -> "Details needed"
+        r.status == "approved" -> "In your care"
+        else -> requestStatusLabel(r.status)
+    }
+
+    fun careStateColor(r: HelpRequest): Int = when {
+        r.status == "approved" && !r.handoverDone -> R.color.limit_stock_color
+        r.status == "approved" -> R.color.online_green
+        else -> requestStatusColor(r.status)
+    }
 }

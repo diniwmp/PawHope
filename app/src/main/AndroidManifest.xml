@@ -21,37 +21,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PawHope">
-        <activity
-            android:name=".activity.CareReportActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".activity.HandoverActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".activity.CareDetailActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".activity.MyCareActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AnimalDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AuthActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".activity.LocationPickerActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
 
+        <!-- Google Maps API key (local.properties එකෙන් එනවා) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <!-- Camera photo එක තාවකාලිකව save කරන්න -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -67,13 +43,46 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.LocationPickerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.AnimalDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Care tracking -->
+        <activity
+            android:name=".activity.MyCareActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.CareDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.HandoverActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.CareReportActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

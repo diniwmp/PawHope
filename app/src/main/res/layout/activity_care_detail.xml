@@ -53,7 +53,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- සතාගේ summary + offer status -->
                 <com.google.android.material.card.MaterialCardView
                     style="@style/ReportCard"
                     android:layout_marginTop="0dp">
@@ -137,7 +136,55 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Approve වුණාට පස්සේ, Adoption details පුරවලා නැත්නම් -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/journeyCard"
+                    style="@style/ReportCard"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Care journey"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/journeyStep1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/journeyStep2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/journeyStep3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/journeyStep4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/handoverCard"
                     style="@style/ReportCard"
@@ -180,7 +227,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Adoption details පුරවපු පස්සේ පෙනෙන කොටස -->
                 <LinearLayout
                     android:id="@+id/careGroup"
                     android:layout_width="match_parent"
@@ -188,7 +234,6 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <!-- Monthly check-in banner -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/checkInBanner"
                         style="@style/ReportCard"
@@ -228,7 +273,6 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Vaccines -->
                     <TextView
                         style="@style/SectionLabel"
                         android:text="@string/care_vaccines" />
@@ -246,7 +290,6 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
-                    <!-- Reports යවන්න -->
                     <TextView
                         style="@style/SectionLabel"
                         android:text="Send a report to the PawHope team" />
@@ -461,7 +504,6 @@
                         app:strokeColor="@color/primary_color"
                         app:strokeWidth="1.5dp" />
 
-                    <!-- Reports timeline -->
                     <TextView
                         style="@style/SectionLabel"
                         android:text="@string/care_updates" />
