@@ -1,33 +1,24 @@
 package lk.zenova.pawhope.activity
 
+import android.content.Intent
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
 import lk.zenova.pawhope.R
 import lk.zenova.pawhope.adapter.UpdateAdapter
 import lk.zenova.pawhope.adapter.VaccinationAdapter
@@ -36,8 +27,8 @@ import lk.zenova.pawhope.model.CareUpdate
 import lk.zenova.pawhope.model.HelpRequest
 import lk.zenova.pawhope.model.Vaccination
 import lk.zenova.pawhope.util.CareUi
-import lk.zenova.pawhope.util.ImageUtils
-import kotlin.concurrent.thread
+import kotlin.math.ceil
+
 
 class CareDetailActivity : AppCompatActivity() {
 
@@ -55,6 +46,9 @@ class CareDetailActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var contentScroll: View
     private lateinit var careGroup: View
+    private lateinit var handoverCard: View
+    private lateinit var checkInBanner: MaterialCardView
+    private lateinit var checkInText: TextView
     private lateinit var careImage: ImageView
     private lateinit var careTitle: TextView
     private lateinit var careOffer: TextView
@@ -65,12 +59,6 @@ class CareDetailActivity : AppCompatActivity() {
 
     private lateinit var vaccineAdapter: VaccinationAdapter
     private lateinit var updateAdapter: UpdateAdapter
-
-    private var onPhotoChosen: ((Uri) -> Unit)? = null
-    private val pickPhoto =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) onPhotoChosen?.invoke(uri)
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +74,9 @@ class CareDetailActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         contentScroll = findViewById(R.id.contentScroll)
         careGroup = findViewById(R.id.careGroup)
+        handoverCard = findViewById(R.id.handoverCard)
+        checkInBanner = findViewById(R.id.checkInBanner)
+        checkInText = findViewById(R.id.checkInText)
         careImage = findViewById(R.id.careImage)
         careTitle = findViewById(R.id.careTitle)
         careOffer = findViewById(R.id.careOffer)
@@ -95,8 +86,21 @@ class CareDetailActivity : AppCompatActivity() {
         updateEmpty = findViewById(R.id.updateEmpty)
 
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
-        findViewById<View>(R.id.btnPostUpdate).setOnClickListener { showUpdateSheet(false) }
-        findViewById<View>(R.id.btnReportHealth).setOnClickListener { showUpdateSheet(true) }
+
+        // Adoption details form එකට
+        findViewById<View>(R.id.btnHandover).setOnClickListener {
+            startActivity(
+                Intent(this, HandoverActivity::class.java)
+                    .putExtra(HandoverActivity.EXTRA_REQUEST_ID, requestId)
+            )
+        }
+
+        findViewById<View>(R.id.tileMonthly).setOnClickListener { openReport("monthly") }
+        findViewById<View>(R.id.btnCheckIn).setOnClickListener { openReport("monthly") }
+        findViewById<View>(R.id.tileVaccine).setOnClickListener { openReport("vaccine") }
+        findViewById<View>(R.id.tileVet).setOnClickListener { openReport("vet") }
+        findViewById<View>(R.id.tileHealth).setOnClickListener { openReport("health") }
+        findViewById<View>(R.id.btnQuickUpdate).setOnClickListener { openReport("update") }
 
         vaccineAdapter = VaccinationAdapter(this) { v -> confirmVaccineDone(v) }
         val vaccineRecycler = findViewById<RecyclerView>(R.id.vaccineRecycler)
@@ -109,14 +113,26 @@ class CareDetailActivity : AppCompatActivity() {
         updateRecycler.layoutManager = LinearLayoutManager(this)
         updateRecycler.adapter = updateAdapter
         updateRecycler.isNestedScrollingEnabled = false
+    }
 
+    override fun onStart() {
+        super.onStart()
         loadRequest()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        updatesReg?.remove()
-        vaccinesReg?.remove()
+    override fun onStop() {
+        super.onStop()
+        stopListeners()
+    }
+
+    private fun openReport(type: String) {
+        val req = helpRequest ?: return
+        startActivity(
+            Intent(this, CareReportActivity::class.java)
+                .putExtra(CareReportActivity.EXTRA_REQUEST_ID, requestId)
+                .putExtra(CareReportActivity.EXTRA_ANIMAL_ID, req.animalId)
+                .putExtra(CareReportActivity.EXTRA_TYPE, type)
+        )
     }
 
 
@@ -132,11 +148,6 @@ class CareDetailActivity : AppCompatActivity() {
                 helpRequest = request
                 bindRequest(request)
                 loadAnimal(request.animalId)
-
-                if (request.status == "approved") {
-                    careGroup.visibility = View.VISIBLE
-                    startListeners()
-                }
             }
             .addOnFailureListener { e ->
                 progressBar.visibility = View.GONE
@@ -167,18 +178,52 @@ class CareDetailActivity : AppCompatActivity() {
             ContextCompat.getColor(this, CareUi.requestStatusColor(r.status))
         )
 
-        careMessage.text = when (r.status) {
-            "approved" ->
-                "You're caring for this animal. Please keep the PawHope team updated, " +
-                        "and report any health problem right away."
-            "rejected" ->
+        val approved = r.status == "approved"
+
+        careMessage.text = when {
+            approved && !r.handoverDone ->
+                "Congratulations! Please complete your adoption details so we can start " +
+                        "following your animal's journey."
+            approved ->
+                "You're caring for this animal. Please send a check-in every month, and " +
+                        "report any health problem right away."
+            r.status == "rejected" ->
                 "Thank you for offering to help. We couldn't match this offer this time, " +
                         "but you can still help other animals."
-            "completed" ->
+            r.status == "completed" ->
                 "This care journey is complete. Thank you for giving this animal a safe home."
-            else ->
-                "The PawHope team is reviewing your offer and will contact you soon."
+            else -> "The PawHope team is reviewing your offer and will contact you soon."
         }
+
+        // approve වෙලා, details පුරවලා නැත්නම් පමණක් form card එක
+        handoverCard.visibility = if (approved && !r.handoverDone) View.VISIBLE else View.GONE
+
+        if (approved && r.handoverDone) {
+            careGroup.visibility = View.VISIBLE
+            updateCheckInBanner(r)
+            startListeners()
+        } else {
+            careGroup.visibility = View.GONE
+            stopListeners()
+        }
+    }
+
+    private fun updateCheckInBanner(r: HelpRequest) {
+        val due = r.nextCheckInDue
+        if (due == null) {
+            checkInBanner.visibility = View.GONE
+            return
+        }
+        checkInBanner.visibility = View.VISIBLE
+
+        val days = ceil((due.time - System.currentTimeMillis()) / 86_400_000.0).toInt()
+        val (message, colorRes) = when {
+            days < 0 -> "Monthly check-in is overdue by ${-days} day(s)" to R.color.red
+            days <= 5 -> "Monthly check-in due in $days day(s)" to R.color.limit_stock_color
+            else -> "Next monthly check-in in $days days" to R.color.primary_dark
+        }
+        checkInText.text = message
+        checkInBanner.strokeColor = ContextCompat.getColor(this, colorRes)
     }
 
     private fun bindAnimal(a: Animal?) {
@@ -196,6 +241,7 @@ class CareDetailActivity : AppCompatActivity() {
 
 
     private fun startListeners() {
+        stopListeners()
         val reqRef = db.collection("helpRequests").document(requestId)
 
         updatesReg = reqRef.collection("updates")
@@ -221,6 +267,13 @@ class CareDetailActivity : AppCompatActivity() {
             }
     }
 
+    private fun stopListeners() {
+        updatesReg?.remove()
+        vaccinesReg?.remove()
+        updatesReg = null
+        vaccinesReg = null
+    }
+
 
     private fun confirmVaccineDone(v: Vaccination) {
         MaterialAlertDialogBuilder(this)
@@ -240,153 +293,6 @@ class CareDetailActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
-    }
-
-
-    private fun showUpdateSheet(isHealth: Boolean) {
-        val req = helpRequest ?: return
-
-        val sheet = BottomSheetDialog(this)
-        val view = layoutInflater.inflate(R.layout.sheet_care_update, null)
-        sheet.setContentView(view)
-        sheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-        val healthGroup = view.findViewById<View>(R.id.healthGroup)
-        val chipSymptoms = view.findViewById<ChipGroup>(R.id.chipSymptoms)
-        val chipSeverity = view.findViewById<ChipGroup>(R.id.chipSeverity)
-        val textInput = view.findViewById<TextInputEditText>(R.id.updateTextInput)
-        val btnAddPhoto = view.findViewById<MaterialButton>(R.id.btnAddPhoto)
-        val photoPreview = view.findViewById<ImageView>(R.id.photoPreview)
-        val btnSubmit = view.findViewById<MaterialButton>(R.id.btnSubmitUpdate)
-
-        view.findViewById<TextView>(R.id.sheetTitle).text =
-            if (isHealth) "Report a health problem" else "Share an update"
-        view.findViewById<TextView>(R.id.sheetSubtitle).text =
-            if (isHealth) "Tell us what you noticed. The PawHope team will be alerted and will reply with advice."
-            else "Let us know how your animal is doing."
-        healthGroup.visibility = if (isHealth) View.VISIBLE else View.GONE
-
-        var photoUri: Uri? = null
-        btnAddPhoto.setOnClickListener {
-            onPhotoChosen = { uri ->
-                photoUri = uri
-                photoPreview.visibility = View.VISIBLE
-                Glide.with(this).load(uri).into(photoPreview)
-            }
-            pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        btnSubmit.setOnClickListener {
-            val text = textInput.text?.toString()?.trim().orEmpty()
-
-            val symptoms = chipSymptoms.checkedChipIds.map { id ->
-                view.findViewById<Chip>(id).text.toString()
-            }
-            val severity = when (chipSeverity.checkedChipId) {
-                R.id.chip_sev_mild -> "mild"
-                R.id.chip_sev_moderate -> "moderate"
-                R.id.chip_sev_severe -> "severe"
-                else -> ""
-            }
-
-            if (isHealth) {
-                if (symptoms.isEmpty() && text.isEmpty()) {
-                    toast("Please select a symptom or describe what you noticed")
-                    return@setOnClickListener
-                }
-                if (severity.isEmpty()) {
-                    toast("Please tell us how serious it is")
-                    return@setOnClickListener
-                }
-            } else if (text.isEmpty() && photoUri == null) {
-                toast("Please add a note or a photo")
-                return@setOnClickListener
-            }
-
-            btnSubmit.isEnabled = false
-            sendUpdate(req, isHealth, text, symptoms, severity, photoUri) { success ->
-                if (success) sheet.dismiss() else btnSubmit.isEnabled = true
-            }
-        }
-
-        sheet.show()
-    }
-
-    private fun sendUpdate(
-        req: HelpRequest,
-        isHealth: Boolean,
-        text: String,
-        symptoms: List<String>,
-        severity: String,
-        photoUri: Uri?,
-        onFinished: (Boolean) -> Unit
-    ) {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            onFinished(false)
-            return
-        }
-
-        fun save(photoUrl: String) {
-            val data = hashMapOf<String, Any>(
-                "type" to if (isHealth) "health" else "update",
-                "text" to text,
-                "symptoms" to symptoms,
-                "severity" to severity,
-                "photoUrl" to photoUrl,
-                "authorId" to user.uid,
-                "animalId" to req.animalId,
-                "status" to if (isHealth) "open" else "info",
-                "adminReply" to "",
-                "createdAt" to FieldValue.serverTimestamp()
-            )
-            db.collection("helpRequests").document(requestId).collection("updates").add(data)
-                .addOnSuccessListener {
-                    if (isHealth && severity == "severe") {
-                        toast("The PawHope team has been alerted urgently")
-                    } else {
-                        toast("Sent. Thank you for keeping us updated 🐾")
-                    }
-                    onFinished(true)
-                }
-                .addOnFailureListener { e ->
-                    toast("Couldn't send: ${e.message}")
-                    onFinished(false)
-                }
-        }
-
-        if (photoUri == null) {
-            save("")
-            return
-        }
-
-        val resolver = contentResolver
-        thread {
-            val bytes = try {
-                ImageUtils.compress(resolver, photoUri)
-            } catch (e: Exception) {
-                null
-            }
-            runOnUiThread {
-                if (bytes == null) {
-                    toast("Couldn't read the photo")
-                    onFinished(false)
-                    return@runOnUiThread
-                }
-                val ref = FirebaseStorage.getInstance().reference
-                    .child("care/$requestId/${System.currentTimeMillis()}.jpg")
-                ref.putBytes(bytes)
-                    .continueWithTask { task ->
-                        if (!task.isSuccessful) throw task.exception ?: Exception("Upload failed")
-                        ref.downloadUrl
-                    }
-                    .addOnSuccessListener { url -> save(url.toString()) }
-                    .addOnFailureListener { e ->
-                        toast("Photo upload failed: ${e.message}")
-                        onFinished(false)
-                    }
-            }
-        }
     }
 
     private fun toast(message: String) {

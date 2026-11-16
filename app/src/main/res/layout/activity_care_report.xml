@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.CareReportActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/app_name"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/text_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Photos -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/ReportCard"
+                android:layout_marginTop="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:layout_marginTop="0dp"
+                        android:text="@string/label_photos" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/addPhotoCard"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:layout_marginEnd="10dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:cardBackgroundColor="@color/primary_light"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/primary_color"
+                            app:strokeWidth="1.5dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:importantForAccessibility="no"
+                                    android:src="@drawable/ic_plus"
+                                    app:tint="@color/primary_dark" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="@string/add_photo"
+                                    android:textColor="@color/primary_dark"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/photoRecycler"
+                            android:layout_width="0dp"
+                            android:layout_height="96dp"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/photoHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_hint"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Monthly check-in -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/monthlyGroup"
+                style="@style/ReportCard"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Weight in kg (optional)">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/weightInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:text="Body condition" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipBodyGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_body_good"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="Good" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_body_fair"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fair" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_body_poor"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Poor" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:text="Eating" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipEatGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_eat_normal"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="Normal" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_eat_less"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Less than usual" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_eat_none"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Not eating" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:text="Behavior" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipBehaviorGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_beh_active"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="Active &amp; playful" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_beh_calm"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calm" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_beh_anxious"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Anxious" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_beh_aggressive"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aggressive" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Vaccination -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/vaccineGroup"
+                style="@style/ReportCard"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Vaccine name (e.g. Rabies)">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vaccineNameInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVacDate"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/primary_dark"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_color"
+                        app:strokeWidth="1.5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Clinic / vet name">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vacClinicInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVacNext"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/primary_dark"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_color"
+                        app:strokeWidth="1.5dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Vet visit -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/vetGroup"
+                style="@style/ReportCard"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Clinic / vet name">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vetClinicInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVetDate"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/primary_dark"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_color"
+                        app:strokeWidth="1.5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Reason for the visit">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vetReasonInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Treatment / medicine given">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vetTreatmentInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:minLines="2"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Cost in LKR (optional)">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/vetCostInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Health concern -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/healthGroup"
+                style="@style/ReportCard"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:layout_marginTop="0dp"
+                        android:text="@string/label_symptoms" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipSymptoms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_not_eating"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Not eating" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_vomiting"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vomiting" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_diarrhea"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Diarrhea" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_limping"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Limping" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_skin"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Skin or fur problem" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_sleepy"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Very sleepy" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_behavior"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Unusual behavior" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_breathing"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Breathing problem" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sym_other"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Other" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        style="@style/CardLabel"
+                        android:text="@string/label_severity" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipSeverity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacingHorizontal="8dp"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sev_mild"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mild" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sev_moderate"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Moderate" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_sev_severe"
+                            style="@style/Widget.PawHope.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Severe" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Notes (හැම report එකටම) -->
+            <com.google.android.material.card.MaterialCardView style="@style/ReportCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/notesLayout"
+                        style="@style/Widget.PawHope.TextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_update_text">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/notesInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:minLines="3"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/btn_submit_update"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/primary_color"
+                app:cornerRadius="16dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:indeterminateTint="@color/primary_color"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
