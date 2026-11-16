@@ -123,11 +123,13 @@ class HomeFragment : Fragment() {
     private fun applyFilter() {
         val checked = chipGroup.checkedChipId
 
-        val filtered = allAnimals.
-        filter { matches(it, checked) }
+        val filtered = allAnimals
+            .filter { it.status != "adopted" }
+            .filter { matches(it, checked) }
             .sortedWith(
                 compareBy<Animal> { urgencyRank(it.condition) }
-                    .thenByDescending { it.createdAt })
+                    .thenByDescending { it.createdAt }
+            )
 
         adapter.setItems(filtered)
 

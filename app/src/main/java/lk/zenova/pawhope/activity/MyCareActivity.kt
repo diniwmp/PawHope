@@ -63,7 +63,11 @@ class MyCareActivity : AppCompatActivity() {
             .addOnSuccessListener { snap ->
                 val requests = snap.documents
                     .mapNotNull { runCatching { it.toObject(HelpRequest::class.java) }.getOrNull() }
-                    .sortedByDescending { it.createdAt }
+                    .sortedWith(
+                        compareBy<HelpRequest> { careRank(it) }
+                            .thenByDescending { it.createdAt }
+                    )
+
 
                 if (requests.isEmpty()) {
                     showItems(emptyList())
@@ -101,5 +105,12 @@ class MyCareActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
         adapter.setItems(items)
         emptyState.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+    }
+    private fun careRank(r: HelpRequest): Int = when {
+        r.status == "approved" && !r.handoverDone -> 0
+        r.status == "approved" -> 1
+        r.status == "pending" -> 2
+        r.status == "completed" -> 3
+        else -> 4
     }
 }

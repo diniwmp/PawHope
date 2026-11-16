@@ -38,7 +38,6 @@
     <color name="dark_red">#EF4444</color>
     <color name="limit_stock_color">#F59E0B</color>
 
-    <!-- PawHope semantic colors (light mode) -->
     <color name="primary_color">#6ED4CB</color>
     <color name="primary_dark">#3FB3A9</color>
     <color name="primary_light">#E4F7F5</color>

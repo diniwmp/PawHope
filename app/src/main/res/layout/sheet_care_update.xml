@@ -27,7 +27,6 @@
             android:textColor="@color/text_secondary"
             android:textSize="13sp" />
 
-        <!-- Health report එකට පමණක් පෙනෙන කොටස -->
         <LinearLayout
             android:id="@+id/healthGroup"
             android:layout_width="match_parent"
