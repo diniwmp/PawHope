@@ -30,8 +30,7 @@ import lk.zenova.pawhope.model.Vaccination
 import lk.zenova.pawhope.util.CareUi
 import kotlin.math.ceil
 
-// Care dashboard: ඔයා උදව් කරන සතා ගැන සියල්ල
-// (journey, adoption details, vaccines, monthly check-ins, vet visits, health reports)
+
 class CareDetailActivity : AppCompatActivity() {
 
     companion object {
@@ -98,7 +97,6 @@ class CareDetailActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
-        // Adoption details form එකට
         findViewById<View>(R.id.btnHandover).setOnClickListener {
             startActivity(
                 Intent(this, HandoverActivity::class.java)
@@ -106,7 +104,6 @@ class CareDetailActivity : AppCompatActivity() {
             )
         }
 
-        // Reports යවන්න (වර්ගයක් තෝරලා)
         findViewById<View>(R.id.tileMonthly).setOnClickListener { openReport("monthly") }
         findViewById<View>(R.id.btnCheckIn).setOnClickListener { openReport("monthly") }
         findViewById<View>(R.id.tileVaccine).setOnClickListener { openReport("vaccine") }
@@ -114,14 +111,12 @@ class CareDetailActivity : AppCompatActivity() {
         findViewById<View>(R.id.tileHealth).setOnClickListener { openReport("health") }
         findViewById<View>(R.id.btnQuickUpdate).setOnClickListener { openReport("update") }
 
-        // Vaccines list
         vaccineAdapter = VaccinationAdapter(this) { v -> confirmVaccineDone(v) }
         val vaccineRecycler = findViewById<RecyclerView>(R.id.vaccineRecycler)
         vaccineRecycler.layoutManager = LinearLayoutManager(this)
         vaccineRecycler.adapter = vaccineAdapter
         vaccineRecycler.isNestedScrollingEnabled = false
 
-        // Reports timeline
         updateAdapter = UpdateAdapter(this)
         val updateRecycler = findViewById<RecyclerView>(R.id.updateRecycler)
         updateRecycler.layoutManager = LinearLayoutManager(this)
@@ -129,7 +124,6 @@ class CareDetailActivity : AppCompatActivity() {
         updateRecycler.isNestedScrollingEnabled = false
     }
 
-    // Form එකෙන් / report එකෙන් ආපහු ආවම නැවත load කරනවා (වෙනස්කම් පෙන්නන්න)
     override fun onStart() {
         super.onStart()
         loadRequest()
@@ -150,14 +144,12 @@ class CareDetailActivity : AppCompatActivity() {
         )
     }
 
-    // ===================== Load =====================
 
     private fun loadRequest() {
         db.collection("helpRequests").document(requestId).get()
             .addOnSuccessListener { doc ->
                 if (isFinishing || isDestroyed) return@addOnSuccessListener
 
-                // data කියවද්දී error එකක් ආවොත් crash නොවී හේතුව පෙන්නනවා
                 val request = runCatching { doc.toObject(HelpRequest::class.java) }
                     .onFailure { toast("Couldn't read this offer: ${it.message}") }
                     .getOrNull()
@@ -196,7 +188,6 @@ class CareDetailActivity : AppCompatActivity() {
             }
     }
 
-    // ===================== Bind =====================
 
     private fun bindRequest(r: HelpRequest) {
         careOffer.text = "Your offer: ${CareUi.helpTypeLabel(r.type)}"
@@ -225,10 +216,8 @@ class CareDetailActivity : AppCompatActivity() {
 
         bindJourney(r)
 
-        // approve වෙලා, details පුරවලා නැත්නම් පමණක් form card එක
         handoverCard.visibility = if (approved && !r.handoverDone) View.VISIBLE else View.GONE
 
-        // details පුරවපු පස්සේ විතරක් reports කොටස
         if (approved && r.handoverDone) {
             careGroup.visibility = View.VISIBLE
             updateCheckInBanner(r)
@@ -239,7 +228,6 @@ class CareDetailActivity : AppCompatActivity() {
         }
     }
 
-    // "Care journey" පියවර card එක: ✓ ඉවරයි, ➜ දැන් මේක, ○ තව
     private fun bindJourney(r: HelpRequest) {
         val approved = r.status == "approved"
         val show = r.status == "pending" || (approved && !r.handoverDone)
@@ -252,7 +240,7 @@ class CareDetailActivity : AppCompatActivity() {
             "Adoption details (photo, home, promise)",
             "Monthly reports, vaccines & vet visits"
         )
-        val current = if (approved) 3 else 2   // දැන් ඉන්න පියවර
+        val current = if (approved) 3 else 2
 
         journeySteps.forEachIndexed { index, textView ->
             val number = index + 1
@@ -272,7 +260,6 @@ class CareDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ඊළඟ මාසික check-in එකට ඉතිරි දවස් ගණන (රතු = පරක්කු, කහ = ළඟයි)
     private fun updateCheckInBanner(r: HelpRequest) {
         val due = r.nextCheckInDue
         if (due == null) {
@@ -304,10 +291,9 @@ class CareDetailActivity : AppCompatActivity() {
         }
     }
 
-    // ===================== Real-time listeners =====================
 
     private fun startListeners() {
-        stopListeners()   // දෙපාරක් listen නොවෙන්න කලින් ඒවා නවත්තනවා
+        stopListeners()
         val reqRef = db.collection("helpRequests").document(requestId)
 
         updatesReg = reqRef.collection("updates")
@@ -340,7 +326,6 @@ class CareDetailActivity : AppCompatActivity() {
         vaccinesReg = null
     }
 
-    // ===================== Vaccine "Mark as given" =====================
 
     private fun confirmVaccineDone(v: Vaccination) {
         MaterialAlertDialogBuilder(this)
