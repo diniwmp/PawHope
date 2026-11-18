@@ -23,8 +23,7 @@ import lk.zenova.pawhope.util.ImageUtils
 import lk.zenova.pawhope.util.PhotoPicker
 import java.util.Date
 
-// සතාව ගත්තාට පස්සේ පුරවන "Adoption details" form එක.
-// සාර්ථකව save වුණාම helpRequests/{id} එකේ handover විස්තර + handoverDone = true වෙනවා.
+
 class HandoverActivity : AppCompatActivity() {
 
     companion object {
@@ -52,7 +51,6 @@ class HandoverActivity : AppCompatActivity() {
     private var homeLat: Double? = null
     private var homeLng: Double? = null
 
-    // Map එකෙන් ගෙදර තැන තෝරද්දී ලැබෙන ප්‍රතිඵලය
     private val pinHome =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -88,7 +86,7 @@ class HandoverActivity : AppCompatActivity() {
         btnSubmit = findViewById(R.id.btnSubmit)
         progressBar = findViewById(R.id.progressBar)
 
-        // Photos (උපරිම 2ක්)
+
         photoAdapter = PhotoAdapter(this) { position -> photoPicker.removeAt(position) }
         photoPicker = PhotoPicker(this, 2) { refreshPhotos() }
         val photoRecycler = findViewById<RecyclerView>(R.id.photoRecycler)
@@ -100,7 +98,7 @@ class HandoverActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
-        // ගත් දිනය තෝරන්න
+
         btnTakenDate.text = "Date you took the animal: $takenDate"
         btnTakenDate.setOnClickListener {
             DateUtil.pick(this, "Date you took the animal") { picked ->
@@ -120,7 +118,7 @@ class HandoverActivity : AppCompatActivity() {
         photoHint.text = "${photoPicker.photos.size}/2 photos (at least 1)"
     }
 
-    // 1) form එක validate කරනවා
+
     private fun submit() {
         val petName = petNameInput.text?.toString()?.trim().orEmpty()
         val address = homeAddressInput.text?.toString()?.trim().orEmpty()
@@ -145,7 +143,7 @@ class HandoverActivity : AppCompatActivity() {
 
         setLoading(true)
 
-        // 2) Photos upload කරනවා
+
         ImageUtils.uploadAll(this, photoPicker.photos.toList(), "care/$requestId", "handover") { urls, error ->
             if (urls == null) {
                 setLoading(false)
@@ -156,7 +154,7 @@ class HandoverActivity : AppCompatActivity() {
         }
     }
 
-    // 3) විස්තර helpRequests document එකට save කරනවා
+
     private fun saveHandover(petName: String, address: String, note: String, urls: List<String>) {
         val handover = hashMapOf<String, Any>(
             "petName" to petName,
