@@ -42,14 +42,12 @@ import java.util.Date
 import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
-// සතෙක් report කරන screen එක
 class ReportFragment : Fragment() {
 
     companion object {
         private const val MAX_PHOTOS = 4
     }
 
-    // ---------- Views ----------
     private lateinit var addPhotoCard: View
     private lateinit var photoHint: TextView
     private lateinit var chipTypeGroup: ChipGroup
@@ -64,7 +62,6 @@ class ReportFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var photoAdapter: PhotoAdapter
 
-    // ---------- State (form එකේ දැනට තියෙන දත්ත) ----------
     private val photos = mutableListOf<Uri>()
     private var cameraUri: Uri? = null
     private var pickedLat: Double? = null
@@ -73,10 +70,7 @@ class ReportFragment : Fragment() {
     private var pickedCity = ""
     private var pickedDistrict = ""
 
-    // ---------- Activity result launchers ----------
-    // (මේවා Fragment එක හදද්දීම, property විදිහට register කරන්න ඕනි)
 
-    // Camera එකෙන් photo එකක් ගන්න
     private val takePicture =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
@@ -84,15 +78,12 @@ class ReportFragment : Fragment() {
             }
         }
 
-    // Gallery එකෙන් photos කිහිපයක් තෝරන්න (permission ඕනි නෑ)
     private val pickImages =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_PHOTOS)) { uris ->
-            // තව තියෙන ඉඩ ප්‍රමාණයට විතරක් ගන්නවා
             uris.take(MAX_PHOTOS - photos.size).forEach { photos.add(it) }
             refreshPhotos()
         }
 
-    // Map screen එකෙන් තෝරපු තැන ආපහු ගන්න
     private val pickLocation =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -128,7 +119,6 @@ class ReportFragment : Fragment() {
         btnSubmit = view.findViewById(R.id.btnSubmit)
         progressBar = view.findViewById(R.id.progressBar)
 
-        // Photos list එක (තිරස් අතට)
         photoAdapter = PhotoAdapter(requireContext()) { position ->
             photos.removeAt(position)
             refreshPhotos()
@@ -147,7 +137,6 @@ class ReportFragment : Fragment() {
         refreshPhotos()
     }
 
-    // ===================== Photos =====================
 
     private fun showPhotoOptions() {
         if (photos.size >= MAX_PHOTOS) {
@@ -165,7 +154,6 @@ class ReportFragment : Fragment() {
             .show()
     }
 
-    // Camera photo එක cache folder එකේ තාවකාලික file එකකට save කරනවා
     private fun launchCamera() {
         val dir = File(requireContext().cacheDir, "camera").apply { mkdirs() }
         val file = File.createTempFile("photo_", ".jpg", dir)
@@ -190,7 +178,6 @@ class ReportFragment : Fragment() {
         photoHint.text = "${photos.size}/$MAX_PHOTOS photos (at least 1)"
     }
 
-    // ===================== Location =====================
 
     private fun showPickedLocation() {
         val lat = pickedLat ?: return
@@ -200,7 +187,6 @@ class ReportFragment : Fragment() {
         btnPickLocation.setText(R.string.change_location)
     }
 
-    // ===================== Chip තෝරාගැනීම් =====================
 
     private fun selectedType(): String = when (chipTypeGroup.checkedChipId) {
         R.id.chip_type_cat -> "cat"
@@ -208,7 +194,6 @@ class ReportFragment : Fragment() {
         else -> "dog"
     }
 
-    // තෝරලා නැත්නම් null
     private fun selectedCondition(): String? = when (chipCondGroup.checkedChipId) {
         R.id.chip_cond_healthy -> "healthy"
         R.id.chip_cond_sick -> "sick"
@@ -223,9 +208,7 @@ class ReportFragment : Fragment() {
         else -> "help"
     }
 
-    // ===================== Submit =====================
 
-    // 1) form එක validate කරනවා
     private fun submit() {
         if (photos.isEmpty()) {
             toast("Please add at least one photo")
@@ -249,7 +232,6 @@ class ReportFragment : Fragment() {
 
         setLoading(true)
 
-        // 2) login නැත්නම් guest user කෙනෙක් හදලා, ඊළඟට photos ලෑස්ති කරනවා
         AuthHelper.ensureSignedIn(
             onReady = { user -> compressAndUpload(user, condition, description, lat, lng) },
             onError = { e ->
@@ -259,7 +241,6 @@ class ReportFragment : Fragment() {
         )
     }
 
-    // 3) Photos පොඩි කරනවා (background thread එකේ, මොකද මේක බර වැඩක්)
     private fun compressAndUpload(
         user: FirebaseUser,
         condition: String,
@@ -289,7 +270,6 @@ class ReportFragment : Fragment() {
         }
     }
 
-    // 4) Photos Firebase Storage එකට upload කරනවා
     private fun uploadPhotos(
         user: FirebaseUser,
         compressed: List<ByteArray>,
@@ -299,19 +279,17 @@ class ReportFragment : Fragment() {
         lng: Double
     ) {
         val db = FirebaseFirestore.getInstance()
-        val animalRef = db.collection("animals").document()   // අලුත් document id එක දැන්ම හදනවා
+        val animalRef = db.collection("animals").document()
         val storage = FirebaseStorage.getInstance()
 
-        // හැම photo එකකටම upload task එකක් (එකවර upload වෙනවා)
         val uploadTasks = compressed.mapIndexed { index, bytes ->
             val ref = storage.reference.child("animals/${animalRef.id}/img_${index + 1}.jpg")
             ref.putBytes(bytes).continueWithTask { task ->
                 if (!task.isSuccessful) throw task.exception ?: Exception("Upload failed")
-                ref.downloadUrl   // upload ඉවර වුණාම download URL එක ගන්නවා
+                ref.downloadUrl
             }
         }
 
-        // photos ඔක්කොම සාර්ථකව ගියාම විතරක් ඊළඟ පියවරට යනවා
         Tasks.whenAllSuccess<Uri>(uploadTasks)
             .addOnSuccessListener { urls ->
                 saveReport(user, animalRef, urls.map { it.toString() }, condition, description, lat, lng)
@@ -322,7 +300,6 @@ class ReportFragment : Fragment() {
             }
     }
 
-    // 5) Firestore එකට report එක save කරනවා
     private fun saveReport(
         user: FirebaseUser,
         animalRef: DocumentReference,
@@ -347,10 +324,9 @@ class ReportFragment : Fragment() {
             city = pickedCity,
             district = pickedDistrict,
             status = "reported",
-            updatedAt = Date()          // createdAt එක server එක ඉබේම දානවා (@ServerTimestamp)
+            updatedAt = Date()
         )
 
-        // phone/name public document එකේ දාන්නේ නෑ, වෙනම private document එකක
         val privateData = mapOf(
             "reporterId" to user.uid,
             "reporterName" to nameInput.text?.toString()?.trim().orEmpty(),
@@ -358,7 +334,6 @@ class ReportFragment : Fragment() {
             "createdAt" to FieldValue.serverTimestamp()
         )
 
-        // batch = document දෙකම එකවර save වෙනවා, නැත්නම් දෙකම නෑ
         val batch = db.batch()
         batch.set(animalRef, animal)
         batch.set(db.collection("animals_private").document(animalRef.id), privateData)
@@ -376,10 +351,7 @@ class ReportFragment : Fragment() {
             }
     }
 
-    // ===================== Helpers =====================
 
-    // Photo එක උපරිම 1280px වලට පොඩි කරලා JPEG (quality 80) බවට හරවනවා.
-    // ImageDecoder එක photo එක හරවලා තියෙන්නේ (EXIF) නම් ඒකත් හරියට හදනවා.
     private fun compressImage(resolver: ContentResolver, uri: Uri): ByteArray {
         val source = ImageDecoder.createSource(resolver, uri)
         val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
