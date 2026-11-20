@@ -24,8 +24,7 @@ import lk.zenova.pawhope.util.ImageUtils
 import lk.zenova.pawhope.util.PhotoPicker
 import java.util.Date
 
-// Care report එකක් admin ට යවන screen එක.
-// type: monthly | vaccine | vet | health | update. type අනුව අදාල කොටස් විතරක් පෙන්නනවා.
+
 class CareReportActivity : AppCompatActivity() {
 
     companion object {
@@ -45,13 +44,11 @@ class CareReportActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var notesInput: TextInputEditText
 
-    // monthly
     private lateinit var weightInput: TextInputEditText
     private lateinit var chipBodyGroup: ChipGroup
     private lateinit var chipEatGroup: ChipGroup
     private lateinit var chipBehaviorGroup: ChipGroup
 
-    // vaccine
     private lateinit var vaccineNameInput: TextInputEditText
     private lateinit var vacClinicInput: TextInputEditText
     private lateinit var btnVacDate: MaterialButton
@@ -59,7 +56,6 @@ class CareReportActivity : AppCompatActivity() {
     private var vacDate = DateUtil.today()
     private var vacNext = ""
 
-    // vet
     private lateinit var vetClinicInput: TextInputEditText
     private lateinit var vetReasonInput: TextInputEditText
     private lateinit var vetTreatmentInput: TextInputEditText
@@ -67,11 +63,9 @@ class CareReportActivity : AppCompatActivity() {
     private lateinit var btnVetDate: MaterialButton
     private var vetDate = DateUtil.today()
 
-    // health
     private lateinit var chipSymptoms: ChipGroup
     private lateinit var chipSeverity: ChipGroup
 
-    // මේ වර්ගවලට අඩුම තරමින් photo එකක් ඕනි
     private val photoRequired get() = type == "monthly" || type == "vaccine"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,7 +133,6 @@ class CareReportActivity : AppCompatActivity() {
         photoHint.text = "${photoPicker.photos.size}/3 photos$need"
     }
 
-    // report වර්ගය අනුව මාතෘකාව සහ පෙන්නන කොටස් තීරණය කරනවා
     private fun setupForType() {
         findViewById<TextView>(R.id.titleText).text = CareUi.reportTitle(type)
         findViewById<TextView>(R.id.subtitleText).text = when (type) {
@@ -163,7 +156,6 @@ class CareReportActivity : AppCompatActivity() {
             else -> "What's new?"
         }
 
-        // දින තෝරන බටන් (vaccine සහ vet)
         btnVacDate.text = "Date given: $vacDate"
         btnVacDate.setOnClickListener {
             DateUtil.pick(this, "Date given") { vacDate = it; btnVacDate.text = "Date given: $it" }
@@ -178,7 +170,6 @@ class CareReportActivity : AppCompatActivity() {
         }
     }
 
-    // තෝරපු chip එකේ අකුරු (නැත්නම් "")
     private fun checkedText(group: ChipGroup): String {
         val id = group.checkedChipId
         return if (id == View.NO_ID) "" else findViewById<Chip>(id).text.toString()
@@ -186,7 +177,6 @@ class CareReportActivity : AppCompatActivity() {
 
     private fun text(input: TextInputEditText): String = input.text?.toString()?.trim().orEmpty()
 
-    // ===================== Submit =====================
 
     private fun submit() {
         val notes = text(notesInput)
@@ -194,7 +184,6 @@ class CareReportActivity : AppCompatActivity() {
         var symptoms = emptyList<String>()
         var severity = ""
 
-        // 1) වර්ගය අනුව validate කරලා details හදනවා
         when (type) {
             "monthly" -> {
                 val weight = text(weightInput)
@@ -268,7 +257,6 @@ class CareReportActivity : AppCompatActivity() {
 
         setLoading(true)
 
-        // 2) Photos upload කරනවා, ඊට පස්සේ Firestore එකට save කරනවා
         ImageUtils.uploadAll(this, photoPicker.photos.toList(), "care/$requestId", type) { urls, error ->
             if (urls == null) {
                 setLoading(false)
@@ -300,12 +288,11 @@ class CareReportActivity : AppCompatActivity() {
             "details" to details,
             "authorId" to uid,
             "animalId" to animalId,
-            "status" to if (type == "health") "open" else "info",   // health report = admin බලන්න "open"
+            "status" to if (type == "health") "open" else "info",
             "adminReply" to "",
             "createdAt" to FieldValue.serverTimestamp()
         )
 
-        // batch = report එකයි (monthly නම්) ඊළඟ check-in දිනයයි එකවර save වෙනවා
         val batch = db.batch()
         batch.set(reqRef.collection("updates").document(), data)
         if (type == "monthly") {
