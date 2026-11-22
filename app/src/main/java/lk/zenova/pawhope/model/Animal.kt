@@ -9,8 +9,8 @@ data class Animal(
     @DocumentId var id: String = "",
     var reporterId: String = "",
     var guest: Boolean = false,
-    var animalType: String = "",              // dog | cat | other
-    var condition: String = "",               // healthy | needs_help | injured | critical
+    var animalType: String = "",
+    var condition: String = "",
     var needType: String = "",
     var description: String = "",
     var photoUrls: List<String> = emptyList(),
