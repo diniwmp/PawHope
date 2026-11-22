@@ -18,7 +18,6 @@ import lk.zenova.pawhope.util.CareUi
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-// "My care" list එකේ සතා කාඩ් එක
 class CareAdapter(
     private val context: Context,
     private val onClick: (CareItem) -> Unit
@@ -53,10 +52,8 @@ class CareAdapter(
         val request = item.request
         val animal = item.animal
 
-        // සතාගේ වර්ගය (සතාව delete වෙලා නම් "Animal")
         holder.title.setText(CareUi.animalTypeRes(animal?.animalType ?: ""))
 
-        // Photo
         val photo = animal?.photoUrls?.firstOrNull()
         if (!photo.isNullOrEmpty()) {
             holder.image.clearColorFilter()
@@ -72,7 +69,6 @@ class CareAdapter(
             holder.image.setColorFilter(ContextCompat.getColor(context, R.color.primary_color))
         }
 
-        // තත්වය: Details needed / In your care / Under review ...
         holder.status.text = CareUi.careStateLabel(request)
         holder.status.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(context, CareUi.careStateColor(request))
@@ -80,7 +76,6 @@ class CareAdapter(
 
         holder.offer.text = "Your offer: ${CareUi.helpTypeLabel(request.type)}"
 
-        // ඊළඟට කළ යුතු දේ පිළිබඳ කෙටි උපදෙසක්
         val (hintText, overdue) = hintFor(request)
         holder.hint.text = hintText
         holder.hint.setTextColor(
@@ -90,7 +85,6 @@ class CareAdapter(
         holder.itemView.setOnClickListener { onClick(item) }
     }
 
-    // (උපදෙස් text එක, පරක්කුද කියලා) යුගලයක් දෙනවා
     private fun hintFor(r: HelpRequest): Pair<String, Boolean> = when {
         r.status == "approved" && !r.handoverDone ->
             "Tap to complete your adoption details" to false
